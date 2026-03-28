@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "250113192669",
+    "project_id": "avishu-superappp",
+    "storage_bucket": "avishu-superappp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250113192669:android:8b9a875a21a60f2301a134",
+        "android_client_info": {
+          "package_name": "com.example.fashionmode_hackathon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFS4uakZ0dY8VrKpTF0HjOkOFpkt9ikkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
