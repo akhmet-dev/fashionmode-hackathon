@@ -1,0 +1,52 @@
+{
+  "@@locale": "kk",
+
+  "appName": "AVISHU",
+  "appSubtitle": "СУПЕРҚОСЫМША",
+  "logout": "ШЫҒУ",
+
+  "emailLabel": "ЭМЕЙЛ",
+  "emailHint": "сіздің@email.com",
+  "passwordLabel": "ҚҰПИЯ СӨЗ",
+  "passwordHint": "••••••",
+  "signIn": "КІРУ",
+  "authFailed": "Авторизация қатесі",
+
+  "newCollection": "ЖАҢА КОЛЛЕКЦИЯ",
+  "season": "КӨКТЕМ / ЖАЗ 2026",
+  "preorderBadge": "АЛДЫН АЛА",
+  "buyButton": "САТЫП АЛУ",
+  "preorderButton": "АЛДЫН АЛА ТАПСЫРЫС",
+  "selectDeliveryDate": "ЖЕТКІЗУ КҮНІН ТАҢДАҢЫЗ",
+
+  "myOrders": "МЕНІҢ ТАПСЫРЫСТАРЫМ",
+  "loyaltyProgress": "АДАЛДЫҚ ПРОГРЕСІ",
+  "ordersToNextTier": "{count} / 10 КЕЛЕСІ ДЕҢГЕЙГЕ ТАПСЫРЫС",
+  "@ordersToNextTier": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noOrdersYet": "ТАПСЫРЫСТАР ЖОҚ",
+  "statusPlaced": "ҚАБЫЛДАНДЫ",
+  "statusSewing": "ТІГІЛУДЕ",
+  "statusReady": "ДАЙЫН",
+
+  "dashboard": "БАСҚАРУ ТАҚТАСЫ",
+  "todayRevenue": "БҮГІНГІ ТҮСІМ",
+  "plan": "ЖОСПАР",
+  "activeOrders": "БЕЛСЕНДІ ТАПСЫРЫСТАР",
+  "recentOrders": "СОҢҒЫ ТАПСЫРЫСТАР",
+  "noOrders": "ТАПСЫРЫСТАР ЖОҚ",
+
+  "allOrders": "БАРЛЫҚ ТАПСЫРЫСТАР",
+  "acceptSewing": "ҚАБЫЛДАУ → ТІГУ",
+
+  "production": "ӨНДІРІС",
+  "sewingQueue": "ТІГІН КЕЗЕГІ",
+  "noItems": "ТАПСЫРМА ЖОҚ",
+  "queueEmpty": "КЕЗЕК БОС",
+  "complete": "АЯҚТАУ"
+}

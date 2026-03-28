@@ -4,15 +4,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/providers.dart';
 import '../../../shared/models/order_model.dart';
+
+String _statusLabel(OrderStatus s, AppLocalizations l) => switch (s) {
+      OrderStatus.placed => l.statusPlaced,
+      OrderStatus.sewing => l.statusSewing,
+      OrderStatus.ready => l.statusReady,
+    };
 
 class FranchiseeDashboardScreen extends ConsumerWidget {
   const FranchiseeDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final ordersAsync = ref.watch(allOrdersProvider);
     final formatter = NumberFormat('#,###', 'en_US');
 
@@ -27,7 +35,7 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'DASHBOARD',
+                    l.dashboard,
                     style: GoogleFonts.inter(
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
@@ -41,7 +49,7 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                       if (context.mounted) context.go('/login');
                     },
                     child: Text(
-                      'LOGOUT',
+                      l.logout,
                       style: GoogleFonts.inter(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -64,15 +72,16 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                         o.createdAt.month == DateTime.now().month &&
                         o.createdAt.year == DateTime.now().year)
                     .fold<int>(0, (sum, o) => sum + o.price);
-                final planPercent =
-                    orders.isEmpty ? 0 : ((activeOrders / orders.length) * 100).round();
+                final planPercent = orders.isEmpty
+                    ? 0
+                    : ((activeOrders / orders.length) * 100).round();
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
                       _MetricCard(
-                        label: 'TODAY REVENUE',
+                        label: l.todayRevenue,
                         value: '₸${formatter.format(todayRevenue)}',
                       ),
                       const SizedBox(height: 12),
@@ -80,14 +89,14 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                         children: [
                           Expanded(
                             child: _MetricCard(
-                              label: 'PLAN',
+                              label: l.plan,
                               value: '$planPercent%',
                             ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: _MetricCard(
-                              label: 'ACTIVE ORDERS',
+                              label: l.activeOrders,
                               value: '$activeOrders',
                             ),
                           ),
@@ -117,7 +126,7 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'RECENT ORDERS',
+                l.recentOrders,
                 style: GoogleFonts.inter(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
@@ -135,7 +144,7 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(24),
                     child: Center(
                       child: Text(
-                        'NO ORDERS',
+                        l.noOrders,
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -186,7 +195,7 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                                     ? AppColors.black
                                     : AppColors.lightGrey,
                                 child: Text(
-                                  order.status.name.toUpperCase(),
+                                  _statusLabel(order.status, l),
                                   style: GoogleFonts.inter(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w700,

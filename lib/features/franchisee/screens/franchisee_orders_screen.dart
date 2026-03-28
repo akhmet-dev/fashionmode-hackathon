@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/providers.dart';
 import '../../../shared/models/order_model.dart';
+
+String _statusLabel(OrderStatus s, AppLocalizations l) => switch (s) {
+      OrderStatus.placed => l.statusPlaced,
+      OrderStatus.sewing => l.statusSewing,
+      OrderStatus.ready => l.statusReady,
+    };
 
 class FranchiseeOrdersScreen extends ConsumerWidget {
   const FranchiseeOrdersScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final ordersAsync = ref.watch(allOrdersProvider);
 
     return SafeArea(
@@ -20,7 +28,7 @@ class FranchiseeOrdersScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
             child: Text(
-              'ALL ORDERS',
+              l.allOrders,
               style: GoogleFonts.inter(
                 fontSize: 24,
                 fontWeight: FontWeight.w900,
@@ -37,7 +45,7 @@ class FranchiseeOrdersScreen extends ConsumerWidget {
                 if (orders.isEmpty) {
                   return Center(
                     child: Text(
-                      'NO ORDERS',
+                      l.noOrders,
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -79,6 +87,7 @@ class _FranchiseeOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final formatter = NumberFormat('#,###', 'en_US');
 
     return Container(
@@ -113,7 +122,7 @@ class _FranchiseeOrderCard extends StatelessWidget {
                           ? AppColors.black
                           : AppColors.white,
                       child: Text(
-                        order.status.name.toUpperCase(),
+                        _statusLabel(order.status, l),
                         style: GoogleFonts.inter(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -148,14 +157,14 @@ class _FranchiseeOrderCard extends StatelessWidget {
           if (order.status == OrderStatus.placed) ...[
             const Divider(height: 1, color: AppColors.divider),
             GestureDetector(
-              onTap: () => service.updateOrderStatus(
-                  order.id, OrderStatus.sewing),
+              onTap: () =>
+                  service.updateOrderStatus(order.id, OrderStatus.sewing),
               child: Container(
                 padding: const EdgeInsets.all(16),
                 color: AppColors.black,
                 child: Center(
                   child: Text(
-                    'ACCEPT → SEWING',
+                    l.acceptSewing,
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,

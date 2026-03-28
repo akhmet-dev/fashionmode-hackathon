@@ -1,0 +1,52 @@
+{
+  "@@locale": "ru",
+
+  "appName": "AVISHU",
+  "appSubtitle": "СУПЕРАПП",
+  "logout": "ВЫЙТИ",
+
+  "emailLabel": "ЭЛ. ПОЧТА",
+  "emailHint": "ваш@email.com",
+  "passwordLabel": "ПАРОЛЬ",
+  "passwordHint": "••••••",
+  "signIn": "ВОЙТИ",
+  "authFailed": "Ошибка авторизации",
+
+  "newCollection": "НОВАЯ КОЛЛЕКЦИЯ",
+  "season": "ВЕСНА / ЛЕТО 2026",
+  "preorderBadge": "ПРЕДЗАКАЗ",
+  "buyButton": "КУПИТЬ",
+  "preorderButton": "ПРЕДЗАКАЗ",
+  "selectDeliveryDate": "ВЫБРАТЬ ДАТУ ДОСТАВКИ",
+
+  "myOrders": "МОИ ЗАКАЗЫ",
+  "loyaltyProgress": "ПРОГРЕСС ЛОЯЛЬНОСТИ",
+  "ordersToNextTier": "{count} / 10 ЗАКАЗОВ ДО СЛЕДУЮЩЕГО УРОВНЯ",
+  "@ordersToNextTier": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noOrdersYet": "ЗАКАЗОВ ЕЩЁ НЕТ",
+  "statusPlaced": "ПРИНЯТО",
+  "statusSewing": "ПОШИВ",
+  "statusReady": "ГОТОВО",
+
+  "dashboard": "ДАШБОРД",
+  "todayRevenue": "ВЫРУЧКА СЕГОДНЯ",
+  "plan": "ПЛАН",
+  "activeOrders": "АКТИВНЫЕ ЗАКАЗЫ",
+  "recentOrders": "НЕДАВНИЕ ЗАКАЗЫ",
+  "noOrders": "НЕТ ЗАКАЗОВ",
+
+  "allOrders": "ВСЕ ЗАКАЗЫ",
+  "acceptSewing": "ПРИНЯТЬ → ПОШИВ",
+
+  "production": "ПРОИЗВОДСТВО",
+  "sewingQueue": "ОЧЕРЕДЬ ПОШИВА",
+  "noItems": "НЕТ ЗАДАЧ",
+  "queueEmpty": "ОЧЕРЕДЬ ПУСТА",
+  "complete": "ЗАВЕРШИТЬ"
+}

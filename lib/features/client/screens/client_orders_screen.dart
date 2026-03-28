@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/providers.dart';
 import '../../../shared/models/order_model.dart';
+
+String _statusLabel(OrderStatus s, AppLocalizations l) => switch (s) {
+      OrderStatus.placed => l.statusPlaced,
+      OrderStatus.sewing => l.statusSewing,
+      OrderStatus.ready => l.statusReady,
+    };
 
 class ClientOrdersScreen extends ConsumerWidget {
   const ClientOrdersScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final ordersAsync = ref.watch(clientOrdersProvider);
 
     return SafeArea(
@@ -20,7 +28,7 @@ class ClientOrdersScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
             child: Text(
-              'MY ORDERS',
+              l.myOrders,
               style: GoogleFonts.inter(
                 fontSize: 24,
                 fontWeight: FontWeight.w900,
@@ -39,7 +47,7 @@ class ClientOrdersScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'LOYALTY PROGRESS',
+                    l.loyaltyProgress,
                     style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -51,7 +59,7 @@ class ClientOrdersScreen extends ConsumerWidget {
                   _buildLoyaltyBar(ordersAsync.valueOrNull?.length ?? 0),
                   const SizedBox(height: 8),
                   Text(
-                    '${ordersAsync.valueOrNull?.length ?? 0} / 10 ORDERS TO NEXT TIER',
+                    l.ordersToNextTier(ordersAsync.valueOrNull?.length ?? 0),
                     style: GoogleFonts.inter(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
@@ -71,7 +79,7 @@ class ClientOrdersScreen extends ConsumerWidget {
                 if (orders.isEmpty) {
                   return Center(
                     child: Text(
-                      'NO ORDERS YET',
+                      l.noOrdersYet,
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -181,6 +189,7 @@ class _StatusProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final steps = OrderStatus.values;
     final currentIndex = steps.indexOf(status);
 
@@ -226,7 +235,7 @@ class _StatusProgressBar extends StatelessWidget {
           children: steps.map((s) {
             return Expanded(
               child: Text(
-                s.name.toUpperCase(),
+                _statusLabel(s, l),
                 style: GoogleFonts.inter(
                   fontSize: 9,
                   fontWeight: s == status ? FontWeight.w700 : FontWeight.w400,

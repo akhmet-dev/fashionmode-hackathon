@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/providers.dart';
 import '../../../shared/models/product_model.dart';
@@ -13,6 +14,7 @@ class CatalogScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final productsAsync = ref.watch(productsProvider);
     final user = ref.watch(currentUserProvider).valueOrNull;
 
@@ -26,7 +28,7 @@ class CatalogScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'AVISHU',
+                  l.appName,
                   style: GoogleFonts.inter(
                     fontSize: 24,
                     fontWeight: FontWeight.w900,
@@ -40,7 +42,7 @@ class CatalogScreen extends ConsumerWidget {
                     if (context.mounted) context.go('/login');
                   },
                   child: Text(
-                    'LOGOUT',
+                    l.logout,
                     style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -61,7 +63,7 @@ class CatalogScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'NEW COLLECTION',
+                  l.newCollection,
                   style: GoogleFonts.inter(
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
@@ -71,7 +73,7 @@ class CatalogScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'SPRING / SUMMER 2026',
+                  l.season,
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
@@ -126,6 +128,7 @@ class _ProductCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final formatter = NumberFormat('#,###', 'en_US');
 
     return GestureDetector(
@@ -179,7 +182,7 @@ class _ProductCard extends ConsumerWidget {
                   if (product.isPreorder) ...[
                     const SizedBox(height: 4),
                     Text(
-                      'PRE-ORDER',
+                      l.preorderBadge,
                       style: GoogleFonts.inter(
                         fontSize: 9,
                         fontWeight: FontWeight.w700,
@@ -198,6 +201,7 @@ class _ProductCard extends ConsumerWidget {
   }
 
   void _showProductModal(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final formatter = NumberFormat('#,###', 'en_US');
     DateTime? selectedDate;
 
@@ -271,7 +275,7 @@ class _ProductCard extends ConsumerWidget {
                           selectedDate != null
                               ? DateFormat('dd.MM.yyyy')
                                   .format(selectedDate!)
-                              : 'SELECT DELIVERY DATE',
+                              : l.selectDeliveryDate,
                           style: GoogleFonts.inter(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
@@ -301,7 +305,7 @@ class _ProductCard extends ConsumerWidget {
                     if (ctx.mounted) Navigator.pop(ctx);
                   },
                   child: Text(
-                    product.isPreorder ? 'PRE-ORDER' : 'BUY',
+                    product.isPreorder ? l.preorderButton : l.buyButton,
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,

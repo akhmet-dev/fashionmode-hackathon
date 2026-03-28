@@ -1,0 +1,52 @@
+{
+  "@@locale": "en",
+
+  "appName": "AVISHU",
+  "appSubtitle": "SUPERAPP",
+  "logout": "LOGOUT",
+
+  "emailLabel": "EMAIL",
+  "emailHint": "your@email.com",
+  "passwordLabel": "PASSWORD",
+  "passwordHint": "••••••",
+  "signIn": "SIGN IN",
+  "authFailed": "Authentication failed",
+
+  "newCollection": "NEW COLLECTION",
+  "season": "SPRING / SUMMER 2026",
+  "preorderBadge": "PRE-ORDER",
+  "buyButton": "BUY",
+  "preorderButton": "PRE-ORDER",
+  "selectDeliveryDate": "SELECT DELIVERY DATE",
+
+  "myOrders": "MY ORDERS",
+  "loyaltyProgress": "LOYALTY PROGRESS",
+  "ordersToNextTier": "{count} / 10 ORDERS TO NEXT TIER",
+  "@ordersToNextTier": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noOrdersYet": "NO ORDERS YET",
+  "statusPlaced": "PLACED",
+  "statusSewing": "SEWING",
+  "statusReady": "READY",
+
+  "dashboard": "DASHBOARD",
+  "todayRevenue": "TODAY REVENUE",
+  "plan": "PLAN",
+  "activeOrders": "ACTIVE ORDERS",
+  "recentOrders": "RECENT ORDERS",
+  "noOrders": "NO ORDERS",
+
+  "allOrders": "ALL ORDERS",
+  "acceptSewing": "ACCEPT → SEWING",
+
+  "production": "PRODUCTION",
+  "sewingQueue": "SEWING QUEUE",
+  "noItems": "NO ITEMS",
+  "queueEmpty": "QUEUE IS EMPTY",
+  "complete": "COMPLETE"
+}

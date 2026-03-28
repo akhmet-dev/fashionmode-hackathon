@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -37,9 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (mounted) context.go('/loading');
     } on FirebaseAuthException catch (e) {
-      setState(() => _error = e.message ?? 'Authentication failed');
+      setState(() => _error = e.message ?? AppLocalizations.of(context).authFailed);
     } catch (e) {
-      setState(() => _error = 'Authentication failed');
+      setState(() => _error = AppLocalizations.of(context).authFailed);
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -47,6 +48,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -57,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const Spacer(flex: 2),
               Text(
-                'AVISHU',
+                l.appName,
                 style: GoogleFonts.inter(
                   fontSize: 48,
                   fontWeight: FontWeight.w900,
@@ -67,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 4),
               Text(
-                'SUPERAPP',
+                l.appSubtitle,
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -77,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 64),
               Text(
-                'EMAIL',
+                l.emailLabel,
                 style: GoogleFonts.inter(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
@@ -94,13 +97,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 16,
                   color: AppColors.black,
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'your@email.com',
+                decoration: InputDecoration(
+                  hintText: l.emailHint,
                 ),
               ),
               const SizedBox(height: 24),
               Text(
-                'PASSWORD',
+                l.passwordLabel,
                 style: GoogleFonts.inter(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
@@ -116,8 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 16,
                   color: AppColors.black,
                 ),
-                decoration: const InputDecoration(
-                  hintText: '••••••',
+                decoration: InputDecoration(
+                  hintText: l.passwordHint,
                 ),
               ),
               if (_error != null) ...[
@@ -146,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         )
                       : Text(
-                          'SIGN IN',
+                          l.signIn,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,

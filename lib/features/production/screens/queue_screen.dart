@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/providers.dart';
 import '../../../shared/models/order_model.dart';
@@ -13,6 +14,7 @@ class QueueScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final ordersAsync = ref.watch(sewingOrdersProvider);
 
     return Scaffold(
@@ -27,7 +29,7 @@ class QueueScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'PRODUCTION',
+                    l.production,
                     style: GoogleFonts.inter(
                       fontSize: 24,
                       fontWeight: FontWeight.w900,
@@ -41,7 +43,7 @@ class QueueScreen extends ConsumerWidget {
                       if (context.mounted) context.go('/login');
                     },
                     child: Text(
-                      'LOGOUT',
+                      l.logout,
                       style: GoogleFonts.inter(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -57,7 +59,7 @@ class QueueScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'SEWING QUEUE',
+                l.sewingQueue,
                 style: GoogleFonts.inter(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
@@ -77,7 +79,7 @@ class QueueScreen extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'NO ITEMS',
+                            l.noItems,
                             style: GoogleFonts.inter(
                               fontSize: 18,
                               fontWeight: FontWeight.w900,
@@ -87,7 +89,7 @@ class QueueScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'QUEUE IS EMPTY',
+                            l.queueEmpty,
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
@@ -132,6 +134,7 @@ class _ProductionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final formatter = NumberFormat('#,###', 'en_US');
 
     return Container(
@@ -174,7 +177,7 @@ class _ProductionCard extends StatelessWidget {
               color: AppColors.black,
               child: Center(
                 child: Text(
-                  'ЗАВЕРШИТЬ',
+                  l.complete,
                   style: GoogleFonts.inter(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
