@@ -34,6 +34,14 @@
   "statusSewing": "ТІГІЛУДЕ",
   "statusReady": "ДАЙЫН",
 
+  "cancelButton": "ТАПСЫРЫСТЫ БОЛДЫРМАУ",
+  "cancelConfirmTitle": "БОЛДЫРМАУ?",
+  "cancelConfirmMessage": "Бұл әрекетті қайтара алмайсыз.",
+  "confirmButton": "РАСТАУ",
+  "dismissButton": "ЖАБУ",
+
+  "orderReadyBanner": "Тапсырысыңыз дайын! 🎉",
+
   "dashboard": "БАСҚАРУ ТАҚТАСЫ",
   "todayRevenue": "БҮГІНГІ ТҮСІМ",
   "plan": "ЖОСПАР",
@@ -43,6 +51,7 @@
 
   "allOrders": "БАРЛЫҚ ТАПСЫРЫСТАР",
   "acceptSewing": "ҚАБЫЛДАУ → ТІГУ",
+  "searchHint": "АТЫ БОЙЫНША ІЗДЕУ...",
 
   "production": "ӨНДІРІС",
   "sewingQueue": "ТІГІН КЕЗЕГІ",

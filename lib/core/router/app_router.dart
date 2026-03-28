@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fashionmode_hackathon/l10n/app_localizations.dart';
 import '../providers/providers.dart';
+import '../services/notification_service.dart';
 import '../../shared/models/user_model.dart';
+import '../../shared/models/order_model.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/client/screens/catalog_screen.dart';
 import '../../features/client/screens/client_orders_screen.dart';
@@ -34,7 +37,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       ShellRoute(
         builder: (context, state, child) =>
-            _ClientShell(child: child, state: state),
+            _ClientShell(state: state, child: child),
         routes: [
           GoRoute(
             path: '/client/catalog',
@@ -48,7 +51,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       ShellRoute(
         builder: (context, state, child) =>
-            _FranchiseeShell(child: child, state: state),
+            _FranchiseeShell(state: state, child: child),
         routes: [
           GoRoute(
             path: '/franchisee/dashboard',
@@ -120,7 +123,7 @@ class _RoleRedirectScreen extends ConsumerWidget {
           ),
         ),
       ),
-      error: (_, __) {
+      error: (e, _) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           context.go('/login');
         });
@@ -130,10 +133,19 @@ class _RoleRedirectScreen extends ConsumerWidget {
   }
 }
 
-class _ClientShell extends StatelessWidget {
+class _ClientShell extends ConsumerStatefulWidget {
   final GoRouterState state;
 
   const _ClientShell({required Widget child, required this.state});
+
+  @override
+  ConsumerState<_ClientShell> createState() => _ClientShellState();
+}
+
+class _ClientShellState extends ConsumerState<_ClientShell> {
+  final Set<String> _seenReadyIds = {};
+  bool _initialized = false;
+  String _orderReadyBody = '';
 
   int _indexOf(String location) {
     if (location.startsWith('/client/orders')) return 1;
@@ -142,7 +154,32 @@ class _ClientShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final index = _indexOf(state.matchedLocation);
+    _orderReadyBody = AppLocalizations.of(context).orderReadyBanner;
+
+    ref.listen<AsyncValue<List<OrderModel>>>(clientOrdersProvider, (_, next) {
+      final orders = next.valueOrNull;
+      if (orders == null) return;
+
+      if (!_initialized) {
+        _initialized = true;
+        for (final order in orders) {
+          if (order.status == OrderStatus.ready) {
+            _seenReadyIds.add(order.id);
+          }
+        }
+        return;
+      }
+
+      for (final order in orders) {
+        if (order.status == OrderStatus.ready &&
+            !_seenReadyIds.contains(order.id)) {
+          _seenReadyIds.add(order.id);
+          NotificationService().showOrderReady(_orderReadyBody);
+        }
+      }
+    });
+
+    final index = _indexOf(widget.state.matchedLocation);
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: IndexedStack(

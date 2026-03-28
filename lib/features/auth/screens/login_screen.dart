@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fashionmode_hackathon/l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 
 class LoginScreen extends StatefulWidget {

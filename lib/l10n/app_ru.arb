@@ -34,6 +34,14 @@
   "statusSewing": "ПОШИВ",
   "statusReady": "ГОТОВО",
 
+  "cancelButton": "ОТМЕНИТЬ ЗАКАЗ",
+  "cancelConfirmTitle": "ОТМЕНИТЬ ЗАКАЗ?",
+  "cancelConfirmMessage": "Это действие нельзя отменить.",
+  "confirmButton": "ПОДТВЕРДИТЬ",
+  "dismissButton": "ЗАКРЫТЬ",
+
+  "orderReadyBanner": "Ваш заказ готов! 🎉",
+
   "dashboard": "ДАШБОРД",
   "todayRevenue": "ВЫРУЧКА СЕГОДНЯ",
   "plan": "ПЛАН",
@@ -43,6 +51,7 @@
 
   "allOrders": "ВСЕ ЗАКАЗЫ",
   "acceptSewing": "ПРИНЯТЬ → ПОШИВ",
+  "searchHint": "ПОИСК ПО НАЗВАНИЮ...",
 
   "production": "ПРОИЗВОДСТВО",
   "sewingQueue": "ОЧЕРЕДЬ ПОШИВА",

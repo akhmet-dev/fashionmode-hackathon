@@ -21,7 +21,7 @@ final currentUserProvider = StreamProvider<AppUser?>((ref) {
       return ref.read(firestoreServiceProvider).watchCurrentUser();
     },
     loading: () => Stream.value(null),
-    error: (_, __) => Stream.value(null),
+    error: (e, _) => Stream.value(null),
   );
 });
 

@@ -90,6 +90,10 @@ class FirestoreService {
     });
   }
 
+  Future<void> deleteOrder(String orderId) async {
+    await _db.collection('orders').doc(orderId).delete();
+  }
+
   Future<void> seedDataIfNeeded() async {
     final productsSnap = await _db.collection('products').limit(1).get();
     if (productsSnap.docs.isNotEmpty) return;

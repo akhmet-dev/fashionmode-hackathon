@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fashionmode_hackathon/l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/providers.dart';
 import '../../../shared/models/order_model.dart';
@@ -13,11 +13,27 @@ String _statusLabel(OrderStatus s, AppLocalizations l) => switch (s) {
       OrderStatus.ready => l.statusReady,
     };
 
-class FranchiseeOrdersScreen extends ConsumerWidget {
+class FranchiseeOrdersScreen extends ConsumerStatefulWidget {
   const FranchiseeOrdersScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FranchiseeOrdersScreen> createState() =>
+      _FranchiseeOrdersScreenState();
+}
+
+class _FranchiseeOrdersScreenState
+    extends ConsumerState<FranchiseeOrdersScreen> {
+  final _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final ordersAsync = ref.watch(allOrdersProvider);
 
@@ -37,12 +53,46 @@ class FranchiseeOrdersScreen extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (v) => setState(() => _query = v),
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: AppColors.black,
+              ),
+              decoration: InputDecoration(
+                hintText: l.searchHint,
+                prefixIcon: const Icon(
+                  Icons.search_sharp,
+                  size: 20,
+                  color: AppColors.grey,
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 14),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
           const Divider(height: 1, color: AppColors.divider),
           Expanded(
             child: ordersAsync.when(
               data: (orders) {
-                if (orders.isEmpty) {
+                final filtered = _query.isEmpty
+                    ? orders
+                    : orders
+                        .where((o) =>
+                            o.productName
+                                .toLowerCase()
+                                .contains(_query.toLowerCase()) ||
+                            o.clientName
+                                .toLowerCase()
+                                .contains(_query.toLowerCase()))
+                        .toList();
+
+                if (filtered.isEmpty) {
                   return Center(
                     child: Text(
                       l.noOrders,
@@ -57,9 +107,9 @@ class FranchiseeOrdersScreen extends ConsumerWidget {
                 }
                 return ListView.builder(
                   padding: const EdgeInsets.all(24),
-                  itemCount: orders.length,
+                  itemCount: filtered.length,
                   itemBuilder: (context, i) => _FranchiseeOrderCard(
-                    order: orders[i],
+                    order: filtered[i],
                     service: ref.read(firestoreServiceProvider),
                   ),
                 );

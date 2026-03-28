@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fashionmode_hackathon/l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/providers/providers.dart';
 import '../../../shared/models/order_model.dart';
@@ -92,7 +92,7 @@ class ClientOrdersScreen extends ConsumerWidget {
                 return ListView.separated(
                   padding: const EdgeInsets.all(24),
                   itemCount: orders.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 16),
+                  separatorBuilder: (_, i) => const SizedBox(height: 16),
                   itemBuilder: (context, i) => _OrderCard(order: orders[i]),
                 );
               },
@@ -126,13 +126,14 @@ class ClientOrdersScreen extends ConsumerWidget {
   }
 }
 
-class _OrderCard extends StatelessWidget {
+class _OrderCard extends ConsumerWidget {
   final OrderModel order;
 
   const _OrderCard({required this.order});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final formatter = NumberFormat('#,###', 'en_US');
 
     return Container(
@@ -176,9 +177,123 @@ class _OrderCard extends StatelessWidget {
               color: AppColors.grey,
             ),
           ),
+          if (order.status == OrderStatus.placed) ...[
+            const SizedBox(height: 16),
+            const Divider(height: 1, color: AppColors.divider),
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: () => _confirmCancel(context, ref, l),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.black, width: 1),
+                ),
+                child: Center(
+                  child: Text(
+                    l.cancelButton,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 2,
+                      color: AppColors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
+  }
+
+  Future<void> _confirmCancel(
+      BuildContext context, WidgetRef ref, AppLocalizations l) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => Dialog(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        backgroundColor: AppColors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                l.cancelConfirmTitle,
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 2,
+                  color: AppColors.black,
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Divider(height: 1, color: AppColors.divider),
+              const SizedBox(height: 12),
+              Text(
+                l.cancelConfirmMessage,
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  color: AppColors.grey,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(ctx, false),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        color: AppColors.lightGrey,
+                        child: Center(
+                          child: Text(
+                            l.dismissButton,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(ctx, true),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        color: AppColors.black,
+                        child: Center(
+                          child: Text(
+                            l.confirmButton,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      await ref.read(firestoreServiceProvider).deleteOrder(order.id);
+    }
   }
 }
 

@@ -34,6 +34,14 @@
   "statusSewing": "SEWING",
   "statusReady": "READY",
 
+  "cancelButton": "CANCEL ORDER",
+  "cancelConfirmTitle": "CANCEL ORDER?",
+  "cancelConfirmMessage": "This action cannot be undone.",
+  "confirmButton": "CONFIRM",
+  "dismissButton": "DISMISS",
+
+  "orderReadyBanner": "Your order is ready! 🎉",
+
   "dashboard": "DASHBOARD",
   "todayRevenue": "TODAY REVENUE",
   "plan": "PLAN",
@@ -43,6 +51,7 @@
 
   "allOrders": "ALL ORDERS",
   "acceptSewing": "ACCEPT → SEWING",
+  "searchHint": "SEARCH BY NAME...",
 
   "production": "PRODUCTION",
   "sewingQueue": "SEWING QUEUE",
