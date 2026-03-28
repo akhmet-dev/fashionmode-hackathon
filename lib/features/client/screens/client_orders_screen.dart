@@ -30,7 +30,6 @@ class ClientOrdersScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-          // ── Loyalty Bar ──
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Container(
@@ -66,7 +65,6 @@ class ClientOrdersScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           const Divider(height: 1, color: AppColors.divider),
-          // ── Orders List ──
           Expanded(
             child: ordersAsync.when(
               data: (orders) {
@@ -160,7 +158,6 @@ class _OrderCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          // ── Status Progress Bar ──
           _StatusProgressBar(status: order.status),
           const SizedBox(height: 12),
           Text(

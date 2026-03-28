@@ -21,7 +21,6 @@ class QueueScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ── Header ──
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
               child: Row(
@@ -69,7 +68,6 @@ class QueueScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             const Divider(height: 1, color: AppColors.divider),
-            // ── Queue List ──
             Expanded(
               child: ordersAsync.when(
                 data: (orders) {
@@ -142,7 +140,6 @@ class _ProductionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── Order Info — Large, minimal text ──
           Padding(
             padding: const EdgeInsets.all(32),
             child: Column(
@@ -169,7 +166,6 @@ class _ProductionCard extends StatelessWidget {
             ),
           ),
           const Divider(height: 1, color: AppColors.divider),
-          // ── ЗАВЕРШИТЬ Button — HUGE, full width, 80px ──
           GestureDetector(
             onTap: () =>
                 service.updateOrderStatus(order.id, OrderStatus.ready),

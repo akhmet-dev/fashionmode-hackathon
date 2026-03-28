@@ -8,8 +8,6 @@ class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // ── Users ──────────────────────────────────────────────
-
   Future<AppUser?> getCurrentUser() async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return null;
@@ -26,15 +24,11 @@ class FirestoreService {
         );
   }
 
-  // ── Products ───────────────────────────────────────────
-
   Stream<List<ProductModel>> watchProducts() {
     return _db.collection('products').snapshots().map(
           (snap) => snap.docs.map((d) => ProductModel.fromFirestore(d)).toList(),
         );
   }
-
-  // ── Orders ─────────────────────────────────────────────
 
   Future<void> placeOrder({
     required String productName,
@@ -96,15 +90,12 @@ class FirestoreService {
     });
   }
 
-  // ── Seed Data ──────────────────────────────────────────
-
   Future<void> seedDataIfNeeded() async {
     final productsSnap = await _db.collection('products').limit(1).get();
     if (productsSnap.docs.isNotEmpty) return;
 
     final batch = _db.batch();
 
-    // Seed products
     final products = [
       {'name': 'AVISHU MINIMAL COAT', 'price': 45000, 'isPreorder': false},
       {'name': 'STRUCTURED BLAZER', 'price': 32000, 'isPreorder': false},
@@ -118,27 +109,12 @@ class FirestoreService {
 
     batch.commit();
 
-    // Seed test users (Firestore docs only — Auth accounts must be created
-    // manually in Firebase Console or via the app's first sign-up)
     final testUsers = [
-      {
-        'email': 'client@avishu.kz',
-        'name': 'CLIENT USER',
-        'role': 'client',
-      },
-      {
-        'email': 'franchisee@avishu.kz',
-        'name': 'FRANCHISEE USER',
-        'role': 'franchisee',
-      },
-      {
-        'email': 'production@avishu.kz',
-        'name': 'PRODUCTION USER',
-        'role': 'production',
-      },
+      {'email': 'client@avishu.kz', 'name': 'CLIENT USER', 'role': 'client'},
+      {'email': 'franchisee@avishu.kz', 'name': 'FRANCHISEE USER', 'role': 'franchisee'},
+      {'email': 'production@avishu.kz', 'name': 'PRODUCTION USER', 'role': 'production'},
     ];
 
-    // We'll create Auth users and Firestore docs for each test account
     for (final u in testUsers) {
       try {
         final cred = await _auth.createUserWithEmailAndPassword(
@@ -146,12 +122,9 @@ class FirestoreService {
           password: 'test123',
         );
         await _db.collection('users').doc(cred.user!.uid).set(u);
-      } on FirebaseAuthException catch (_) {
-        // Account already exists — skip
-      }
+      } on FirebaseAuthException catch (_) {}
     }
 
-    // Sign out after seeding so user lands on login
     await _auth.signOut();
   }
 }

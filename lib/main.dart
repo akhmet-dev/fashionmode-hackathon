@@ -12,7 +12,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Seed test data on first launch
   await FirestoreService().seedDataIfNeeded();
 
   runApp(const ProviderScope(child: AvishuApp()));

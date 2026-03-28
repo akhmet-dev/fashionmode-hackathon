@@ -32,7 +32,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/loading',
         builder: (context, state) => const _RoleRedirectScreen(),
       ),
-      // ── Client ──
       ShellRoute(
         builder: (context, state, child) =>
             _ClientShell(child: child, state: state),
@@ -47,7 +46,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      // ── Franchisee ──
       ShellRoute(
         builder: (context, state, child) =>
             _FranchiseeShell(child: child, state: state),
@@ -62,7 +60,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      // ── Production ──
       GoRoute(
         path: '/production/queue',
         builder: (context, state) => const QueueScreen(),
@@ -70,8 +67,6 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-
-// ── Role Redirect ────────────────────────────────────────
 
 class _RoleRedirectScreen extends ConsumerWidget {
   const _RoleRedirectScreen();
@@ -135,17 +130,10 @@ class _RoleRedirectScreen extends ConsumerWidget {
   }
 }
 
-// ── Client Shell with Bottom Nav ─────────────────────────
-
 class _ClientShell extends StatelessWidget {
-  // `child` comes from ShellRoute but is intentionally unused for rendering.
-  // IndexedStack owns both screens directly so there is never a widget-swap
-  // in the body — the overlap bug is impossible with this approach.
-  // ignore: unused_field
-  final Widget child;
   final GoRouterState state;
 
-  const _ClientShell({required this.child, required this.state});
+  const _ClientShell({required Widget child, required this.state});
 
   int _indexOf(String location) {
     if (location.startsWith('/client/orders')) return 1;
@@ -191,15 +179,10 @@ class _ClientShell extends StatelessWidget {
   }
 }
 
-// ── Franchisee Shell with Bottom Nav ─────────────────────
-
 class _FranchiseeShell extends StatelessWidget {
-  // Same pattern: `child` unused, IndexedStack renders both tabs directly.
-  // ignore: unused_field
-  final Widget child;
   final GoRouterState state;
 
-  const _FranchiseeShell({required this.child, required this.state});
+  const _FranchiseeShell({required Widget child, required this.state});
 
   int _indexOf(String location) {
     if (location.startsWith('/franchisee/orders')) return 1;

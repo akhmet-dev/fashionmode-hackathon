@@ -1,3 +1,7 @@
+# Local tools
+.claude/
+.DS_Store
+
 # Miscellaneous
 *.class
 *.lock

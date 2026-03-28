@@ -21,7 +21,6 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ── Header ──
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
               child: Row(
@@ -55,7 +54,6 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 24),
-            // ── Metric Cards ──
             ordersAsync.when(
               data: (orders) {
                 final activeOrders =
@@ -116,7 +114,6 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
             const SizedBox(height: 24),
             const Divider(height: 1, color: AppColors.divider),
             const SizedBox(height: 24),
-            // ── Recent Orders Preview ──
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(

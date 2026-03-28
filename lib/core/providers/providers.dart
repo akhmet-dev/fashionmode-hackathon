@@ -5,19 +5,13 @@ import '../../shared/models/user_model.dart';
 import '../../shared/models/order_model.dart';
 import '../../shared/models/product_model.dart';
 
-// ── Services ─────────────────────────────────────────────
-
 final firestoreServiceProvider = Provider<FirestoreService>((ref) {
   return FirestoreService();
 });
 
-// ── Auth State ───────────────────────────────────────────
-
 final authStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
 });
-
-// ── Current App User ─────────────────────────────────────
 
 final currentUserProvider = StreamProvider<AppUser?>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -31,13 +25,9 @@ final currentUserProvider = StreamProvider<AppUser?>((ref) {
   );
 });
 
-// ── Products ─────────────────────────────────────────────
-
 final productsProvider = StreamProvider<List<ProductModel>>((ref) {
   return ref.read(firestoreServiceProvider).watchProducts();
 });
-
-// ── Client Orders ────────────────────────────────────────
 
 final clientOrdersProvider = StreamProvider<List<OrderModel>>((ref) {
   final user = ref.watch(currentUserProvider).valueOrNull;
@@ -45,13 +35,9 @@ final clientOrdersProvider = StreamProvider<List<OrderModel>>((ref) {
   return ref.read(firestoreServiceProvider).watchClientOrders(user.uid);
 });
 
-// ── All Orders (Franchisee) ──────────────────────────────
-
 final allOrdersProvider = StreamProvider<List<OrderModel>>((ref) {
   return ref.read(firestoreServiceProvider).watchAllOrders();
 });
-
-// ── Sewing Orders (Production) ───────────────────────────
 
 final sewingOrdersProvider = StreamProvider<List<OrderModel>>((ref) {
   return ref.read(firestoreServiceProvider).watchSewingOrders();

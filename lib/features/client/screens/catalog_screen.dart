@@ -20,7 +20,6 @@ class CatalogScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── Header ──
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
             child: Row(
@@ -54,7 +53,6 @@ class CatalogScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-          // ── Banner ──
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 24),
             padding: const EdgeInsets.all(24),
@@ -86,7 +84,6 @@ class CatalogScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           const Divider(height: 1, color: AppColors.divider),
-          // ── Product Grid ──
           Expanded(
             child: productsAsync.when(
               data: (products) => GridView.builder(
@@ -138,7 +135,6 @@ class _ProductCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Image placeholder
             Expanded(
               child: Container(
                 color: AppColors.lightGrey,
