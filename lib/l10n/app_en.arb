@@ -4,6 +4,10 @@
   "appName": "AVISHU",
   "appSubtitle": "SUPERAPP",
   "logout": "LOGOUT",
+  "catalogNavLabel": "CATALOG",
+  "ordersNavLabel": "ORDERS",
+  "cartNavLabel": "CART",
+  "dashboardNavLabel": "TOWER",
 
   "emailLabel": "EMAIL",
   "emailHint": "your@email.com",
@@ -14,21 +18,113 @@
 
   "newCollection": "NEW COLLECTION",
   "season": "SPRING / SUMMER 2026",
+  "clientShowroomLabel": "CLIENT SHOWROOM",
   "preorderBadge": "PRE-ORDER",
+  "inStockLabel": "IN STOCK",
+  "inStockDescription": "This piece is available for immediate checkout. Once confirmed, the order enters the franchisee control tower and then the production queue.",
+  "preorderDescription": "This piece is available on pre-order. Select a ready date to lock the production slot before sending it forward.",
   "buyButton": "BUY",
+  "addToCartButton": "ADD TO CART",
   "preorderButton": "PRE-ORDER",
   "selectDeliveryDate": "SELECT DELIVERY DATE",
-
-  "myOrders": "MY ORDERS",
-  "loyaltyProgress": "LOYALTY PROGRESS",
-  "ordersToNextTier": "{count} / 10 ORDERS TO NEXT TIER",
-  "@ordersToNextTier": {
+  "addedToCartTitle": "ADDED TO CART",
+  "addedToCartMessage": "{product} is waiting in your cart for checkout.",
+  "@addedToCartMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "openCartButton": "OPEN CART",
+  "continueShoppingButton": "CONTINUE",
+  "orderPlacedTitle": "ORDER PLACED",
+  "orderPlacedMessage": "{product} is now in processing. The next step is franchisee confirmation.",
+  "@orderPlacedMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "orderPlacedMultipleMessage": "{count} items were placed and pushed into the live order flow.",
+  "@orderPlacedMultipleMessage": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
+  "trackOrderButton": "TRACK ORDER",
+
+  "myOrders": "MY ORDERS",
+  "notificationsTitle": "MESSAGES",
+  "notificationsEmpty": "NO NOTIFICATIONS YET",
+  "notificationsSummary": "NEW MESSAGES: {count}",
+  "@notificationsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyProgress": "LOYALTY PROGRESS",
+  "loyaltyTapHint": "TAP TO VIEW LEVELS",
+  "loyaltyLevelLabel": "LEVEL: {level}",
+  "@loyaltyLevelLabel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "loyaltyToNextLevel": "{count} ORDERS TO LEVEL {level}",
+  "@loyaltyToNextLevel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "loyaltyMaxLevelMessage": "MAXIMUM LEVEL REACHED",
+  "loyaltyDetailsTitle": "LOYALTY LEVELS",
+  "loyaltyCurrentStatus": "CURRENT LEVEL",
+  "loyaltyUnlockedAt": "FROM {count} ORDERS",
+  "@loyaltyUnlockedAt": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyRangeBetween": "FROM {start} TO {end} ORDERS",
+  "@loyaltyRangeBetween": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyRangeFrom": "FROM {start} ORDERS",
+  "@loyaltyRangeFrom": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyLevelNovice": "NOVICE",
+  "loyaltyLevelStyleLover": "STYLE LOVER",
+  "loyaltyLevelFashionista": "FASHIONISTA",
+  "loyaltyLevelStylist": "STYLIST",
+  "loyaltyLevelStyleExpert": "STYLE EXPERT",
+  "loyaltyLevelStyleIcon": "STYLE ICON",
   "noOrdersYet": "NO ORDERS YET",
   "statusPlaced": "PLACED",
   "statusSewing": "SEWING",
@@ -41,21 +137,136 @@
   "dismissButton": "DISMISS",
 
   "orderReadyBanner": "Your order is ready! 🎉",
+  "clientOrderAcceptedNotification": "{product} was accepted and moved to sewing.",
+  "@clientOrderAcceptedNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "clientOrderReadyNotification": "{product} is ready. Open order tracking for the latest status.",
+  "@clientOrderReadyNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+
+  "cartTitle": "CART",
+  "cartItemsCount": "{count} ITEMS",
+  "@cartItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cartSelectionTitle": "SELECTION",
+  "cartSelectionHint": "Mark the pieces you want to checkout, remove the rest, and place only the selected items.",
+  "cartEmptyMessage": "YOUR CART IS EMPTY",
+  "selectedItemsLabel": "SELECTED: {count}",
+  "@selectedItemsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "buySelectedButton": "BUY SELECTED",
+  "removeButton": "REMOVE",
 
   "dashboard": "DASHBOARD",
+  "controlTowerTitle": "CONTROL TOWER",
+  "controlTowerSubtitle": "LIVE FRANCHISEE VIEW",
   "todayRevenue": "TODAY REVENUE",
+  "dailyGoalLabel": "TODAY TARGET: ₸{target}",
+  "@dailyGoalLabel": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "editPlanButton": "EDIT TARGET",
+  "setPlanTitle": "TODAY'S TARGET",
+  "setPlanHint": "Set your revenue target for the day so the control tower calculates progress against your real plan.",
+  "setPlanInputHint": "FOR EXAMPLE, 250000",
+  "savePlanButton": "SAVE TARGET",
   "plan": "PLAN",
   "activeOrders": "ACTIVE ORDERS",
   "recentOrders": "RECENT ORDERS",
   "noOrders": "NO ORDERS",
+  "planProgressLabel": "{percent}% OF TARGET ₸{target}",
+  "@planProgressLabel": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRateLabel": "READY RATE",
+  "averageCheckLabel": "AVG CHECK",
+  "orderFlowTitle": "ORDER FLOW",
+  "newOrdersLabel": "NEW",
+  "sewingLoadLabel": "SEWING",
+  "readyOrdersLabel": "READY",
+  "liveOrdersTitle": "LIVE FEED",
+  "franchiseeNewOrderNotification": "New order: {product}. Review and accept it.",
+  "@franchiseeNewOrderNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "franchiseeOrderReadyNotification": "{product} was completed by production and is ready to hand over.",
+  "@franchiseeOrderReadyNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
 
   "allOrders": "ALL ORDERS",
   "acceptSewing": "ACCEPT → SEWING",
   "searchHint": "SEARCH BY NAME...",
+  "acceptOrderTitle": "ACCEPT THIS ORDER?",
+  "acceptOrderMessage": "{product} will move into sewing and instantly appear on the production tablet.",
+  "@acceptOrderMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
 
   "production": "PRODUCTION",
+  "productionSubtitle": "MASTER TABLET",
   "sewingQueue": "SEWING QUEUE",
   "noItems": "NO ITEMS",
   "queueEmpty": "QUEUE IS EMPTY",
-  "complete": "COMPLETE"
+  "complete": "COMPLETE",
+  "completeOrderTitle": "COMPLETE THIS ORDER?",
+  "completeOrderMessage": "{product} will be marked ready and both client and franchisee will receive the status update.",
+  "@completeOrderMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "productionTaskNotification": "New queue task: {product}.",
+  "@productionTaskNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -7,12 +7,14 @@ class AppUser {
   final String email;
   final String name;
   final UserRole role;
+  final int? dailyRevenueTarget;
 
   const AppUser({
     required this.uid,
     required this.email,
     required this.name,
     required this.role,
+    this.dailyRevenueTarget,
   });
 
   factory AppUser.fromFirestore(DocumentSnapshot doc) {
@@ -25,12 +27,14 @@ class AppUser {
         (r) => r.name == data['role'],
         orElse: () => UserRole.client,
       ),
+      dailyRevenueTarget: data['dailyRevenueTarget'] as int?,
     );
   }
 
   Map<String, dynamic> toMap() => {
-        'email': email,
-        'name': name,
-        'role': role.name,
-      };
+    'email': email,
+    'name': name,
+    'role': role.name,
+    if (dailyRevenueTarget != null) 'dailyRevenueTarget': dailyRevenueTarget,
+  };
 }

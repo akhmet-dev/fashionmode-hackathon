@@ -10,6 +10,7 @@ class OrderModel {
   final int price;
   final OrderStatus status;
   final DateTime createdAt;
+  final DateTime? completedAt;
   final DateTime? preorderDate;
 
   const OrderModel({
@@ -20,6 +21,7 @@ class OrderModel {
     required this.price,
     required this.status,
     required this.createdAt,
+    this.completedAt,
     this.preorderDate,
   });
 
@@ -36,6 +38,9 @@ class OrderModel {
         orElse: () => OrderStatus.placed,
       ),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      completedAt: data['completedAt'] != null
+          ? (data['completedAt'] as Timestamp).toDate()
+          : null,
       preorderDate: data['preorderDate'] != null
           ? (data['preorderDate'] as Timestamp).toDate()
           : null,
@@ -43,13 +48,13 @@ class OrderModel {
   }
 
   Map<String, dynamic> toMap() => {
-        'clientId': clientId,
-        'clientName': clientName,
-        'productName': productName,
-        'price': price,
-        'status': status.name,
-        'createdAt': Timestamp.fromDate(createdAt),
-        if (preorderDate != null)
-          'preorderDate': Timestamp.fromDate(preorderDate!),
-      };
+    'clientId': clientId,
+    'clientName': clientName,
+    'productName': productName,
+    'price': price,
+    'status': status.name,
+    'createdAt': Timestamp.fromDate(createdAt),
+    if (completedAt != null) 'completedAt': Timestamp.fromDate(completedAt!),
+    if (preorderDate != null) 'preorderDate': Timestamp.fromDate(preorderDate!),
+  };
 }

@@ -24,8 +24,8 @@ class ProductModel {
   }
 
   Map<String, dynamic> toMap() => {
-        'name': name,
-        'price': price,
-        'isPreorder': isPreorder,
-      };
+    'name': name,
+    'price': price,
+    'isPreorder': isPreorder,
+  };
 }

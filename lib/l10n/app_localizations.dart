@@ -118,6 +118,30 @@ abstract class AppLocalizations {
   /// **'LOGOUT'**
   String get logout;
 
+  /// No description provided for @catalogNavLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CATALOG'**
+  String get catalogNavLabel;
+
+  /// No description provided for @ordersNavLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ORDERS'**
+  String get ordersNavLabel;
+
+  /// No description provided for @cartNavLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CART'**
+  String get cartNavLabel;
+
+  /// No description provided for @dashboardNavLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TOWER'**
+  String get dashboardNavLabel;
+
   /// No description provided for @emailLabel.
   ///
   /// In en, this message translates to:
@@ -166,17 +190,47 @@ abstract class AppLocalizations {
   /// **'SPRING / SUMMER 2026'**
   String get season;
 
+  /// No description provided for @clientShowroomLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CLIENT SHOWROOM'**
+  String get clientShowroomLabel;
+
   /// No description provided for @preorderBadge.
   ///
   /// In en, this message translates to:
   /// **'PRE-ORDER'**
   String get preorderBadge;
 
+  /// No description provided for @inStockLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'IN STOCK'**
+  String get inStockLabel;
+
+  /// No description provided for @inStockDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This piece is available for immediate checkout. Once confirmed, the order enters the franchisee control tower and then the production queue.'**
+  String get inStockDescription;
+
+  /// No description provided for @preorderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This piece is available on pre-order. Select a ready date to lock the production slot before sending it forward.'**
+  String get preorderDescription;
+
   /// No description provided for @buyButton.
   ///
   /// In en, this message translates to:
   /// **'BUY'**
   String get buyButton;
+
+  /// No description provided for @addToCartButton.
+  ///
+  /// In en, this message translates to:
+  /// **'ADD TO CART'**
+  String get addToCartButton;
 
   /// No description provided for @preorderButton.
   ///
@@ -190,11 +244,77 @@ abstract class AppLocalizations {
   /// **'SELECT DELIVERY DATE'**
   String get selectDeliveryDate;
 
+  /// No description provided for @addedToCartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ADDED TO CART'**
+  String get addedToCartTitle;
+
+  /// No description provided for @addedToCartMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{product} is waiting in your cart for checkout.'**
+  String addedToCartMessage(String product);
+
+  /// No description provided for @openCartButton.
+  ///
+  /// In en, this message translates to:
+  /// **'OPEN CART'**
+  String get openCartButton;
+
+  /// No description provided for @continueShoppingButton.
+  ///
+  /// In en, this message translates to:
+  /// **'CONTINUE'**
+  String get continueShoppingButton;
+
+  /// No description provided for @orderPlacedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ORDER PLACED'**
+  String get orderPlacedTitle;
+
+  /// No description provided for @orderPlacedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{product} is now in processing. The next step is franchisee confirmation.'**
+  String orderPlacedMessage(String product);
+
+  /// No description provided for @orderPlacedMultipleMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items were placed and pushed into the live order flow.'**
+  String orderPlacedMultipleMessage(int count);
+
+  /// No description provided for @trackOrderButton.
+  ///
+  /// In en, this message translates to:
+  /// **'TRACK ORDER'**
+  String get trackOrderButton;
+
   /// No description provided for @myOrders.
   ///
   /// In en, this message translates to:
   /// **'MY ORDERS'**
   String get myOrders;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'MESSAGES'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'NO NOTIFICATIONS YET'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'NEW MESSAGES: {count}'**
+  String notificationsSummary(int count);
 
   /// No description provided for @loyaltyProgress.
   ///
@@ -202,11 +322,95 @@ abstract class AppLocalizations {
   /// **'LOYALTY PROGRESS'**
   String get loyaltyProgress;
 
-  /// No description provided for @ordersToNextTier.
+  /// No description provided for @loyaltyTapHint.
   ///
   /// In en, this message translates to:
-  /// **'{count} / 10 ORDERS TO NEXT TIER'**
-  String ordersToNextTier(int count);
+  /// **'TAP TO VIEW LEVELS'**
+  String get loyaltyTapHint;
+
+  /// No description provided for @loyaltyLevelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'LEVEL: {level}'**
+  String loyaltyLevelLabel(String level);
+
+  /// No description provided for @loyaltyToNextLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} ORDERS TO LEVEL {level}'**
+  String loyaltyToNextLevel(int count, String level);
+
+  /// No description provided for @loyaltyMaxLevelMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'MAXIMUM LEVEL REACHED'**
+  String get loyaltyMaxLevelMessage;
+
+  /// No description provided for @loyaltyDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'LOYALTY LEVELS'**
+  String get loyaltyDetailsTitle;
+
+  /// No description provided for @loyaltyCurrentStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'CURRENT LEVEL'**
+  String get loyaltyCurrentStatus;
+
+  /// No description provided for @loyaltyUnlockedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'FROM {count} ORDERS'**
+  String loyaltyUnlockedAt(int count);
+
+  /// No description provided for @loyaltyRangeBetween.
+  ///
+  /// In en, this message translates to:
+  /// **'FROM {start} TO {end} ORDERS'**
+  String loyaltyRangeBetween(int start, int end);
+
+  /// No description provided for @loyaltyRangeFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'FROM {start} ORDERS'**
+  String loyaltyRangeFrom(int start);
+
+  /// No description provided for @loyaltyLevelNovice.
+  ///
+  /// In en, this message translates to:
+  /// **'NOVICE'**
+  String get loyaltyLevelNovice;
+
+  /// No description provided for @loyaltyLevelStyleLover.
+  ///
+  /// In en, this message translates to:
+  /// **'STYLE LOVER'**
+  String get loyaltyLevelStyleLover;
+
+  /// No description provided for @loyaltyLevelFashionista.
+  ///
+  /// In en, this message translates to:
+  /// **'FASHIONISTA'**
+  String get loyaltyLevelFashionista;
+
+  /// No description provided for @loyaltyLevelStylist.
+  ///
+  /// In en, this message translates to:
+  /// **'STYLIST'**
+  String get loyaltyLevelStylist;
+
+  /// No description provided for @loyaltyLevelStyleExpert.
+  ///
+  /// In en, this message translates to:
+  /// **'STYLE EXPERT'**
+  String get loyaltyLevelStyleExpert;
+
+  /// No description provided for @loyaltyLevelStyleIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'STYLE ICON'**
+  String get loyaltyLevelStyleIcon;
 
   /// No description provided for @noOrdersYet.
   ///
@@ -268,17 +472,125 @@ abstract class AppLocalizations {
   /// **'Your order is ready! 🎉'**
   String get orderReadyBanner;
 
+  /// No description provided for @clientOrderAcceptedNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'{product} was accepted and moved to sewing.'**
+  String clientOrderAcceptedNotification(String product);
+
+  /// No description provided for @clientOrderReadyNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'{product} is ready. Open order tracking for the latest status.'**
+  String clientOrderReadyNotification(String product);
+
+  /// No description provided for @cartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CART'**
+  String get cartTitle;
+
+  /// No description provided for @cartItemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} ITEMS'**
+  String cartItemsCount(int count);
+
+  /// No description provided for @cartSelectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'SELECTION'**
+  String get cartSelectionTitle;
+
+  /// No description provided for @cartSelectionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark the pieces you want to checkout, remove the rest, and place only the selected items.'**
+  String get cartSelectionHint;
+
+  /// No description provided for @cartEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR CART IS EMPTY'**
+  String get cartEmptyMessage;
+
+  /// No description provided for @selectedItemsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SELECTED: {count}'**
+  String selectedItemsLabel(int count);
+
+  /// No description provided for @buySelectedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'BUY SELECTED'**
+  String get buySelectedButton;
+
+  /// No description provided for @removeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'REMOVE'**
+  String get removeButton;
+
   /// No description provided for @dashboard.
   ///
   /// In en, this message translates to:
   /// **'DASHBOARD'**
   String get dashboard;
 
+  /// No description provided for @controlTowerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CONTROL TOWER'**
+  String get controlTowerTitle;
+
+  /// No description provided for @controlTowerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE FRANCHISEE VIEW'**
+  String get controlTowerSubtitle;
+
   /// No description provided for @todayRevenue.
   ///
   /// In en, this message translates to:
   /// **'TODAY REVENUE'**
   String get todayRevenue;
+
+  /// No description provided for @dailyGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY TARGET: ₸{target}'**
+  String dailyGoalLabel(String target);
+
+  /// No description provided for @editPlanButton.
+  ///
+  /// In en, this message translates to:
+  /// **'EDIT TARGET'**
+  String get editPlanButton;
+
+  /// No description provided for @setPlanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY\'S TARGET'**
+  String get setPlanTitle;
+
+  /// No description provided for @setPlanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your revenue target for the day so the control tower calculates progress against your real plan.'**
+  String get setPlanHint;
+
+  /// No description provided for @setPlanInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'FOR EXAMPLE, 250000'**
+  String get setPlanInputHint;
+
+  /// No description provided for @savePlanButton.
+  ///
+  /// In en, this message translates to:
+  /// **'SAVE TARGET'**
+  String get savePlanButton;
 
   /// No description provided for @plan.
   ///
@@ -304,6 +616,66 @@ abstract class AppLocalizations {
   /// **'NO ORDERS'**
   String get noOrders;
 
+  /// No description provided for @planProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% OF TARGET ₸{target}'**
+  String planProgressLabel(int percent, String target);
+
+  /// No description provided for @completionRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'READY RATE'**
+  String get completionRateLabel;
+
+  /// No description provided for @averageCheckLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'AVG CHECK'**
+  String get averageCheckLabel;
+
+  /// No description provided for @orderFlowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ORDER FLOW'**
+  String get orderFlowTitle;
+
+  /// No description provided for @newOrdersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NEW'**
+  String get newOrdersLabel;
+
+  /// No description provided for @sewingLoadLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SEWING'**
+  String get sewingLoadLabel;
+
+  /// No description provided for @readyOrdersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'READY'**
+  String get readyOrdersLabel;
+
+  /// No description provided for @liveOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE FEED'**
+  String get liveOrdersTitle;
+
+  /// No description provided for @franchiseeNewOrderNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'New order: {product}. Review and accept it.'**
+  String franchiseeNewOrderNotification(String product);
+
+  /// No description provided for @franchiseeOrderReadyNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'{product} was completed by production and is ready to hand over.'**
+  String franchiseeOrderReadyNotification(String product);
+
   /// No description provided for @allOrders.
   ///
   /// In en, this message translates to:
@@ -322,11 +694,29 @@ abstract class AppLocalizations {
   /// **'SEARCH BY NAME...'**
   String get searchHint;
 
+  /// No description provided for @acceptOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCEPT THIS ORDER?'**
+  String get acceptOrderTitle;
+
+  /// No description provided for @acceptOrderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{product} will move into sewing and instantly appear on the production tablet.'**
+  String acceptOrderMessage(String product);
+
   /// No description provided for @production.
   ///
   /// In en, this message translates to:
   /// **'PRODUCTION'**
   String get production;
+
+  /// No description provided for @productionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'MASTER TABLET'**
+  String get productionSubtitle;
 
   /// No description provided for @sewingQueue.
   ///
@@ -351,6 +741,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'COMPLETE'**
   String get complete;
+
+  /// No description provided for @completeOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'COMPLETE THIS ORDER?'**
+  String get completeOrderTitle;
+
+  /// No description provided for @completeOrderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{product} will be marked ready and both client and franchisee will receive the status update.'**
+  String completeOrderMessage(String product);
+
+  /// No description provided for @productionTaskNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'New queue task: {product}.'**
+  String productionTaskNotification(String product);
 }
 
 class _AppLocalizationsDelegate

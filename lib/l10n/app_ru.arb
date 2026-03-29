@@ -4,6 +4,10 @@
   "appName": "AVISHU",
   "appSubtitle": "СУПЕРАПП",
   "logout": "ВЫЙТИ",
+  "catalogNavLabel": "КАТАЛОГ",
+  "ordersNavLabel": "ЗАКАЗЫ",
+  "cartNavLabel": "КОРЗИНА",
+  "dashboardNavLabel": "БАШНЯ",
 
   "emailLabel": "ЭЛ. ПОЧТА",
   "emailHint": "ваш@email.com",
@@ -14,21 +18,113 @@
 
   "newCollection": "НОВАЯ КОЛЛЕКЦИЯ",
   "season": "ВЕСНА / ЛЕТО 2026",
+  "clientShowroomLabel": "КЛИЕНТСКАЯ ВИТРИНА",
   "preorderBadge": "ПРЕДЗАКАЗ",
+  "inStockLabel": "В НАЛИЧИИ",
+  "inStockDescription": "Товар доступен к немедленному оформлению. Заказ сразу попадает в башню управления франчайзи и далее в производство.",
+  "preorderDescription": "Этот товар доступен по предзаказу. Выберите удобную дату готовности, чтобы зафиксировать выпуск изделия.",
   "buyButton": "КУПИТЬ",
+  "addToCartButton": "В КОРЗИНУ",
   "preorderButton": "ПРЕДЗАКАЗ",
   "selectDeliveryDate": "ВЫБРАТЬ ДАТУ ДОСТАВКИ",
-
-  "myOrders": "МОИ ЗАКАЗЫ",
-  "loyaltyProgress": "ПРОГРЕСС ЛОЯЛЬНОСТИ",
-  "ordersToNextTier": "{count} / 10 ЗАКАЗОВ ДО СЛЕДУЮЩЕГО УРОВНЯ",
-  "@ordersToNextTier": {
+  "addedToCartTitle": "ДОБАВЛЕНО В КОРЗИНУ",
+  "addedToCartMessage": "{product} уже в корзине и готов к оформлению.",
+  "@addedToCartMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "openCartButton": "ОТКРЫТЬ КОРЗИНУ",
+  "continueShoppingButton": "ПРОДОЛЖИТЬ",
+  "orderPlacedTitle": "ЗАКАЗ ОФОРМЛЕН",
+  "orderPlacedMessage": "{product} передан в обработку. Следующий шаг — подтверждение франчайзи.",
+  "@orderPlacedMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "orderPlacedMultipleMessage": "{count} товаров оформлены и уже отправлены в общий поток заказов.",
+  "@orderPlacedMultipleMessage": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
+  "trackOrderButton": "ОТСЛЕДИТЬ ЗАКАЗ",
+
+  "myOrders": "МОИ ЗАКАЗЫ",
+  "notificationsTitle": "СООБЩЕНИЯ",
+  "notificationsEmpty": "УВЕДОМЛЕНИЙ ПОКА НЕТ",
+  "notificationsSummary": "НОВЫХ СООБЩЕНИЙ: {count}",
+  "@notificationsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyProgress": "ПРОГРЕСС ЛОЯЛЬНОСТИ",
+  "loyaltyTapHint": "НАЖМИТЕ, ЧТОБЫ ПОСМОТРЕТЬ УРОВНИ",
+  "loyaltyLevelLabel": "УРОВЕНЬ: {level}",
+  "@loyaltyLevelLabel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "loyaltyToNextLevel": "ЕЩЁ {count} ЗАКАЗОВ ДО УРОВНЯ {level}",
+  "@loyaltyToNextLevel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "loyaltyMaxLevelMessage": "МАКСИМАЛЬНЫЙ УРОВЕНЬ ДОСТИГНУТ",
+  "loyaltyDetailsTitle": "УРОВНИ ЛОЯЛЬНОСТИ",
+  "loyaltyCurrentStatus": "ТЕКУЩИЙ УРОВЕНЬ",
+  "loyaltyUnlockedAt": "ОТ {count} ЗАКАЗОВ",
+  "@loyaltyUnlockedAt": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyRangeBetween": "ОТ {start} ДО {end} ЗАКАЗОВ",
+  "@loyaltyRangeBetween": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyRangeFrom": "ОТ {start} ЗАКАЗОВ",
+  "@loyaltyRangeFrom": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyLevelNovice": "НОВИЧОК",
+  "loyaltyLevelStyleLover": "ЛЮБИТЕЛЬ СТИЛЯ",
+  "loyaltyLevelFashionista": "МОДНИК",
+  "loyaltyLevelStylist": "СТИЛИСТ",
+  "loyaltyLevelStyleExpert": "ЭКСПЕРТ СТИЛЯ",
+  "loyaltyLevelStyleIcon": "ИКОНА СТИЛЯ",
   "noOrdersYet": "ЗАКАЗОВ ЕЩЁ НЕТ",
   "statusPlaced": "ПРИНЯТО",
   "statusSewing": "ПОШИВ",
@@ -41,21 +137,136 @@
   "dismissButton": "ЗАКРЫТЬ",
 
   "orderReadyBanner": "Ваш заказ готов! 🎉",
+  "clientOrderAcceptedNotification": "{product} принят в работу и передан в пошив.",
+  "@clientOrderAcceptedNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "clientOrderReadyNotification": "{product} готов. Можно открывать трекинг заказа.",
+  "@clientOrderReadyNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+
+  "cartTitle": "КОРЗИНА",
+  "cartItemsCount": "{count} ПОЗИЦИЙ",
+  "@cartItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cartSelectionTitle": "ВЫБОР ПОЗИЦИЙ",
+  "cartSelectionHint": "Отмечайте товары для оформления, снимайте лишние и удаляйте ненужное прямо из корзины.",
+  "cartEmptyMessage": "КОРЗИНА ПОКА ПУСТА",
+  "selectedItemsLabel": "ВЫБРАНО: {count}",
+  "@selectedItemsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "buySelectedButton": "КУПИТЬ ВЫБРАННОЕ",
+  "removeButton": "УДАЛИТЬ",
 
   "dashboard": "ДАШБОРД",
+  "controlTowerTitle": "БАШНЯ УПРАВЛЕНИЯ",
+  "controlTowerSubtitle": "ПАНЕЛЬ ФРАНЧАЙЗИ",
   "todayRevenue": "ВЫРУЧКА СЕГОДНЯ",
+  "dailyGoalLabel": "ЦЕЛЬ ДНЯ: ₸{target}",
+  "@dailyGoalLabel": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "editPlanButton": "ИЗМЕНИТЬ ЦЕЛЬ",
+  "setPlanTitle": "ЦЕЛЬ НА СЕГОДНЯ",
+  "setPlanHint": "Укажите план по выручке, чтобы башня управления считала выполнение от вашей реальной цели.",
+  "setPlanInputHint": "НАПРИМЕР, 250000",
+  "savePlanButton": "СОХРАНИТЬ ЦЕЛЬ",
   "plan": "ПЛАН",
   "activeOrders": "АКТИВНЫЕ ЗАКАЗЫ",
   "recentOrders": "НЕДАВНИЕ ЗАКАЗЫ",
   "noOrders": "НЕТ ЗАКАЗОВ",
+  "planProgressLabel": "{percent}% ОТ ЦЕЛИ ₸{target}",
+  "@planProgressLabel": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRateLabel": "ГОТОВО",
+  "averageCheckLabel": "СРЕДНИЙ ЧЕК",
+  "orderFlowTitle": "ПОТОК ЗАКАЗОВ",
+  "newOrdersLabel": "НОВЫЕ",
+  "sewingLoadLabel": "В ПОШИВЕ",
+  "readyOrdersLabel": "ГОТОВО",
+  "liveOrdersTitle": "ЖИВАЯ ЛЕНТА",
+  "franchiseeNewOrderNotification": "Новый заказ: {product}. Проверьте и примите в работу.",
+  "@franchiseeNewOrderNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "franchiseeOrderReadyNotification": "{product} завершён производством и готов к выдаче.",
+  "@franchiseeOrderReadyNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
 
   "allOrders": "ВСЕ ЗАКАЗЫ",
   "acceptSewing": "ПРИНЯТЬ → ПОШИВ",
   "searchHint": "ПОИСК ПО НАЗВАНИЮ...",
+  "acceptOrderTitle": "ПРИНЯТЬ ЗАКАЗ?",
+  "acceptOrderMessage": "{product} будет переведён в пошив и сразу появится в очереди цеха.",
+  "@acceptOrderMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
 
   "production": "ПРОИЗВОДСТВО",
+  "productionSubtitle": "ПЛАНШЕТ ЦЕХА",
   "sewingQueue": "ОЧЕРЕДЬ ПОШИВА",
   "noItems": "НЕТ ЗАДАЧ",
   "queueEmpty": "ОЧЕРЕДЬ ПУСТА",
-  "complete": "ЗАВЕРШИТЬ"
+  "complete": "ЗАВЕРШИТЬ",
+  "completeOrderTitle": "ЗАВЕРШИТЬ ЗАКАЗ?",
+  "completeOrderMessage": "{product} будет отмечен как готовый, а клиент и франчайзи получат обновление статуса.",
+  "@completeOrderMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "productionTaskNotification": "Новая задача в очереди: {product}.",
+  "@productionTaskNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  }
 }

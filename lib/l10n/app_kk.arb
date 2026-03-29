@@ -4,6 +4,10 @@
   "appName": "AVISHU",
   "appSubtitle": "СУПЕРҚОСЫМША",
   "logout": "ШЫҒУ",
+  "catalogNavLabel": "CATALOG",
+  "ordersNavLabel": "ORDERS",
+  "cartNavLabel": "CART",
+  "dashboardNavLabel": "TOWER",
 
   "emailLabel": "ЭМЕЙЛ",
   "emailHint": "сіздің@email.com",
@@ -14,21 +18,113 @@
 
   "newCollection": "ЖАҢА КОЛЛЕКЦИЯ",
   "season": "КӨКТЕМ / ЖАЗ 2026",
+  "clientShowroomLabel": "CLIENT SHOWROOM",
   "preorderBadge": "АЛДЫН АЛА",
+  "inStockLabel": "ҚОЛДА БАР",
+  "inStockDescription": "Бұл өнімді бірден рәсімдеуге болады. Тапсырыс бірден франчайзи басқару мұнарасына және кейін өндіріс кезегіне түседі.",
+  "preorderDescription": "Бұл өнім алдын ала тапсырыспен беріледі. Өндіріс слотын бекіту үшін дайын болу күнін таңдаңыз.",
   "buyButton": "САТЫП АЛУ",
+  "addToCartButton": "СЕБЕТКЕ",
   "preorderButton": "АЛДЫН АЛА ТАПСЫРЫС",
   "selectDeliveryDate": "ЖЕТКІЗУ КҮНІН ТАҢДАҢЫЗ",
-
-  "myOrders": "МЕНІҢ ТАПСЫРЫСТАРЫМ",
-  "loyaltyProgress": "АДАЛДЫҚ ПРОГРЕСІ",
-  "ordersToNextTier": "{count} / 10 КЕЛЕСІ ДЕҢГЕЙГЕ ТАПСЫРЫС",
-  "@ordersToNextTier": {
+  "addedToCartTitle": "СЕБЕТКЕ ҚОСЫЛДЫ",
+  "addedToCartMessage": "{product} себетке қосылды және рәсімдеуге дайын.",
+  "@addedToCartMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "openCartButton": "СЕБЕТТІ АШУ",
+  "continueShoppingButton": "ЖАЛҒАСТЫРУ",
+  "orderPlacedTitle": "ТАПСЫРЫС РӘСІМДЕЛДІ",
+  "orderPlacedMessage": "{product} өңдеуге жіберілді. Келесі қадам — франчайзи растауы.",
+  "@orderPlacedMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "orderPlacedMultipleMessage": "{count} өнім рәсімделіп, ортақ тапсырыс ағынына жіберілді.",
+  "@orderPlacedMultipleMessage": {
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
+  "trackOrderButton": "ТАПСЫРЫСТЫ ҚАДАҒАЛАУ",
+
+  "myOrders": "МЕНІҢ ТАПСЫРЫСТАРЫМ",
+  "notificationsTitle": "ХАБАРЛАМАЛАР",
+  "notificationsEmpty": "ХАБАРЛАМАЛАР ӘЗІРГЕ ЖОҚ",
+  "notificationsSummary": "ЖАҢА ХАБАРЛАМАЛАР: {count}",
+  "@notificationsSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyProgress": "АДАЛДЫҚ ПРОГРЕСІ",
+  "loyaltyTapHint": "ДЕҢГЕЙЛЕРДІ КӨРУ ҮШІН БАСЫҢЫЗ",
+  "loyaltyLevelLabel": "ДЕҢГЕЙ: {level}",
+  "@loyaltyLevelLabel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "loyaltyToNextLevel": "{level} ДЕҢГЕЙІНЕ ДЕЙІН ТАҒЫ {count} ТАПСЫРЫС",
+  "@loyaltyToNextLevel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "loyaltyMaxLevelMessage": "ЕҢ ЖОҒАРЫ ДЕҢГЕЙГЕ ЖЕТТІҢІЗ",
+  "loyaltyDetailsTitle": "АДАЛДЫҚ ДЕҢГЕЙЛЕРІ",
+  "loyaltyCurrentStatus": "ҚАЗІРГІ ДЕҢГЕЙ",
+  "loyaltyUnlockedAt": "{count} ТАПСЫРЫСТАН БАСТАП",
+  "@loyaltyUnlockedAt": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyRangeBetween": "{start}-ТЕН {end}-КЕ ДЕЙІН ТАПСЫРЫС",
+  "@loyaltyRangeBetween": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyRangeFrom": "{start} ТАПСЫРЫСТАН БАСТАП",
+  "@loyaltyRangeFrom": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      }
+    }
+  },
+  "loyaltyLevelNovice": "ЖАҢАДАН БАСТАУШЫ",
+  "loyaltyLevelStyleLover": "СТИЛЬ СҮЙЕР",
+  "loyaltyLevelFashionista": "СӘНҚОЙ",
+  "loyaltyLevelStylist": "СТИЛИСТ",
+  "loyaltyLevelStyleExpert": "СТИЛЬ САРАПШЫСЫ",
+  "loyaltyLevelStyleIcon": "СТИЛЬ ИКОНАСЫ",
   "noOrdersYet": "ТАПСЫРЫСТАР ЖОҚ",
   "statusPlaced": "ҚАБЫЛДАНДЫ",
   "statusSewing": "ТІГІЛУДЕ",
@@ -41,21 +137,136 @@
   "dismissButton": "ЖАБУ",
 
   "orderReadyBanner": "Тапсырысыңыз дайын! 🎉",
+  "clientOrderAcceptedNotification": "{product} қабылданып, тігуге жіберілді.",
+  "@clientOrderAcceptedNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "clientOrderReadyNotification": "{product} дайын. Соңғы статусты көру үшін трекингті ашыңыз.",
+  "@clientOrderReadyNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+
+  "cartTitle": "СЕБЕТ",
+  "cartItemsCount": "{count} ӨНІМ",
+  "@cartItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cartSelectionTitle": "ТАҢДАУ",
+  "cartSelectionHint": "Рәсімдейтін өнімдерді белгілеңіз, артықтарын алып тастаңыз және тек таңдалғандарын сатып алыңыз.",
+  "cartEmptyMessage": "СЕБЕТ ӘЗІРГЕ БОС",
+  "selectedItemsLabel": "ТАҢДАЛДЫ: {count}",
+  "@selectedItemsLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "buySelectedButton": "ТАҢДАЛҒАНДЫ САТЫП АЛУ",
+  "removeButton": "ӨШІРУ",
 
   "dashboard": "БАСҚАРУ ТАҚТАСЫ",
+  "controlTowerTitle": "БАСҚАРУ МҰНАРАСЫ",
+  "controlTowerSubtitle": "LIVE FRANCHISEE VIEW",
   "todayRevenue": "БҮГІНГІ ТҮСІМ",
+  "dailyGoalLabel": "КҮНДІК МАҚСАТ: ₸{target}",
+  "@dailyGoalLabel": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "editPlanButton": "МАҚСАТТЫ ӨЗГЕРТУ",
+  "setPlanTitle": "БҮГІНГІ МАҚСАТ",
+  "setPlanHint": "Басқару мұнарасы орындалуды нақты жоспарыңызға қатысты есептеуі үшін күндік түсім мақсатын енгізіңіз.",
+  "setPlanInputHint": "МЫСАЛЫ, 250000",
+  "savePlanButton": "МАҚСАТТЫ САҚТАУ",
   "plan": "ЖОСПАР",
   "activeOrders": "БЕЛСЕНДІ ТАПСЫРЫСТАР",
   "recentOrders": "СОҢҒЫ ТАПСЫРЫСТАР",
   "noOrders": "ТАПСЫРЫСТАР ЖОҚ",
+  "planProgressLabel": "МАҚСАТТЫҢ {percent}% ₸{target}",
+  "@planProgressLabel": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRateLabel": "ДАЙЫН",
+  "averageCheckLabel": "ОРТА ЧЕК",
+  "orderFlowTitle": "ТАПСЫРЫС АҒЫНЫ",
+  "newOrdersLabel": "ЖАҢА",
+  "sewingLoadLabel": "ТІГІЛУДЕ",
+  "readyOrdersLabel": "ДАЙЫН",
+  "liveOrdersTitle": "ТІКЕЛЕЙ ЛЕНТА",
+  "franchiseeNewOrderNotification": "Жаңа тапсырыс: {product}. Қарап, жұмысқа қабылдаңыз.",
+  "@franchiseeNewOrderNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "franchiseeOrderReadyNotification": "{product} өндірісте аяқталып, беруге дайын.",
+  "@franchiseeOrderReadyNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
 
   "allOrders": "БАРЛЫҚ ТАПСЫРЫСТАР",
   "acceptSewing": "ҚАБЫЛДАУ → ТІГУ",
   "searchHint": "АТЫ БОЙЫНША ІЗДЕУ...",
+  "acceptOrderTitle": "ТАПСЫРЫСТЫ ҚАБЫЛДАУ?",
+  "acceptOrderMessage": "{product} тігуге өтеді және бірден өндіріс планшетінде көрінеді.",
+  "@acceptOrderMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
 
   "production": "ӨНДІРІС",
+  "productionSubtitle": "MASTER TABLET",
   "sewingQueue": "ТІГІН КЕЗЕГІ",
   "noItems": "ТАПСЫРМА ЖОҚ",
   "queueEmpty": "КЕЗЕК БОС",
-  "complete": "АЯҚТАУ"
+  "complete": "АЯҚТАУ",
+  "completeOrderTitle": "ТАПСЫРЫСТЫ АЯҚТАУ?",
+  "completeOrderMessage": "{product} дайын деп белгіленеді, ал клиент пен франчайзи статус жаңартуын алады.",
+  "@completeOrderMessage": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  },
+  "productionTaskNotification": "Кезекте жаңа тапсырма: {product}.",
+  "@productionTaskNotification": {
+    "placeholders": {
+      "product": {
+        "type": "String"
+      }
+    }
+  }
 }

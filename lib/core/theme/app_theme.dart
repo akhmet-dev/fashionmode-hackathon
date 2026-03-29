@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../shared/widgets/avishu_motion.dart';
+
 class AppColors {
   static const black = Color(0xFF000000);
   static const white = Color(0xFFFFFFFF);
@@ -16,6 +18,15 @@ class AppTheme {
 
     return ThemeData(
       useMaterial3: false,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.macOS: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
+        },
+      ),
       scaffoldBackgroundColor: AppColors.white,
       colorScheme: const ColorScheme(
         brightness: Brightness.light,
@@ -99,33 +110,32 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
+          elevation: 0,
           backgroundColor: AppColors.black,
           foregroundColor: AppColors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          minimumSize: const Size(0, 56),
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
           textStyle: GoogleFonts.inter(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            letterSpacing: 2,
+            letterSpacing: 1.2,
           ),
-        ),
+        ).copyWith(animationDuration: AvishuMotion.fast),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.black,
           side: const BorderSide(color: AppColors.black, width: 1),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          minimumSize: const Size(0, 56),
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
           textStyle: GoogleFonts.inter(
             fontSize: 14,
             fontWeight: FontWeight.w700,
-            letterSpacing: 2,
+            letterSpacing: 1.2,
           ),
-        ),
+        ).copyWith(animationDuration: AvishuMotion.fast),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -142,11 +152,11 @@ class AppTheme {
           borderRadius: BorderRadius.zero,
           borderSide: BorderSide(color: AppColors.black, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        hintStyle: GoogleFonts.inter(
-          color: AppColors.grey,
-          fontSize: 14,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
         ),
+        hintStyle: GoogleFonts.inter(color: AppColors.grey, fontSize: 14),
         labelStyle: GoogleFonts.inter(
           color: AppColors.grey,
           fontSize: 14,
@@ -157,9 +167,7 @@ class AppTheme {
         color: AppColors.lightGrey,
         elevation: 0,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.white,

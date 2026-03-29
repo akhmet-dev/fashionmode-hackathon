@@ -1,18 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:fashionmode_hackathon/l10n/app_localizations.dart';
-import '../providers/providers.dart';
-import '../services/notification_service.dart';
-import '../../shared/models/user_model.dart';
-import '../../shared/models/order_model.dart';
+
 import '../../features/auth/screens/login_screen.dart';
+import '../../features/client/screens/cart_screen.dart';
 import '../../features/client/screens/catalog_screen.dart';
 import '../../features/client/screens/client_orders_screen.dart';
 import '../../features/franchisee/screens/franchisee_dashboard_screen.dart';
 import '../../features/franchisee/screens/franchisee_orders_screen.dart';
 import '../../features/production/screens/queue_screen.dart';
+import '../../shared/models/user_model.dart';
+import '../../shared/widgets/avishu_motion.dart';
+import '../providers/providers.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -27,10 +29,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/loading',
         builder: (context, state) => const _RoleRedirectScreen(),
@@ -46,6 +45,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/client/orders',
             builder: (context, state) => const ClientOrdersScreen(),
+          ),
+          GoRoute(
+            path: '/client/cart',
+            builder: (context, state) => const CartScreen(),
           ),
         ],
       ),
@@ -96,33 +99,9 @@ class _RoleRedirectScreen extends ConsumerWidget {
             }
           });
         }
-        return const Scaffold(
-          backgroundColor: Color(0xFFFFFFFF),
-          body: Center(
-            child: SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Color(0xFF000000),
-              ),
-            ),
-          ),
-        );
+        return const _LoadingScreen();
       },
-      loading: () => const Scaffold(
-        backgroundColor: Color(0xFFFFFFFF),
-        body: Center(
-          child: SizedBox(
-            width: 24,
-            height: 24,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: Color(0xFF000000),
-            ),
-          ),
-        ),
-      ),
+      loading: () => const _LoadingScreen(),
       error: (e, _) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           context.go('/login');
@@ -133,61 +112,54 @@ class _RoleRedirectScreen extends ConsumerWidget {
   }
 }
 
-class _ClientShell extends ConsumerStatefulWidget {
-  final GoRouterState state;
-
-  const _ClientShell({required Widget child, required this.state});
+class _LoadingScreen extends StatelessWidget {
+  const _LoadingScreen();
 
   @override
-  ConsumerState<_ClientShell> createState() => _ClientShellState();
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: Color(0xFFFFFFFF),
+      body: Center(
+        child: SizedBox(
+          width: 24,
+          height: 24,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: Color(0xFF000000),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _ClientShellState extends ConsumerState<_ClientShell> {
-  final Set<String> _seenReadyIds = {};
-  bool _initialized = false;
-  String _orderReadyBody = '';
+class _ClientShell extends StatelessWidget {
+  final GoRouterState state;
+  final Widget child;
+
+  const _ClientShell({required this.child, required this.state});
 
   int _indexOf(String location) {
     if (location.startsWith('/client/orders')) return 1;
+    if (location.startsWith('/client/cart')) return 2;
     return 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    _orderReadyBody = AppLocalizations.of(context).orderReadyBanner;
-
-    ref.listen<AsyncValue<List<OrderModel>>>(clientOrdersProvider, (_, next) {
-      final orders = next.valueOrNull;
-      if (orders == null) return;
-
-      if (!_initialized) {
-        _initialized = true;
-        for (final order in orders) {
-          if (order.status == OrderStatus.ready) {
-            _seenReadyIds.add(order.id);
-          }
-        }
-        return;
-      }
-
-      for (final order in orders) {
-        if (order.status == OrderStatus.ready &&
-            !_seenReadyIds.contains(order.id)) {
-          _seenReadyIds.add(order.id);
-          NotificationService().showOrderReady(_orderReadyBody);
-        }
-      }
-    });
-
-    final index = _indexOf(widget.state.matchedLocation);
+    final l = AppLocalizations.of(context);
+    final index = _indexOf(state.matchedLocation);
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: IndexedStack(
-        index: index,
-        children: const [
-          CatalogScreen(),
-          ClientOrdersScreen(),
-        ],
+      body: AnimatedSwitcher(
+        duration: AvishuMotion.medium,
+        switchInCurve: AvishuMotion.emphasis,
+        switchOutCurve: AvishuMotion.exit,
+        transitionBuilder: buildAvishuSwitcherTransition,
+        child: KeyedSubtree(
+          key: ValueKey(state.matchedLocation),
+          child: child,
+        ),
       ),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
@@ -198,15 +170,20 @@ class _ClientShellState extends ConsumerState<_ClientShell> {
             onTap: (i) {
               if (i == 0) context.go('/client/catalog');
               if (i == 1) context.go('/client/orders');
+              if (i == 2) context.go('/client/cart');
             },
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.grid_view_sharp),
-                label: 'CATALOG',
+                icon: const Icon(Icons.grid_view_sharp),
+                label: l.catalogNavLabel,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.receipt_long_sharp),
-                label: 'ORDERS',
+                icon: const Icon(Icons.receipt_long_sharp),
+                label: l.ordersNavLabel,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.shopping_bag_outlined),
+                label: l.cartNavLabel,
               ),
             ],
           ),
@@ -218,8 +195,9 @@ class _ClientShellState extends ConsumerState<_ClientShell> {
 
 class _FranchiseeShell extends StatelessWidget {
   final GoRouterState state;
+  final Widget child;
 
-  const _FranchiseeShell({required Widget child, required this.state});
+  const _FranchiseeShell({required this.child, required this.state});
 
   int _indexOf(String location) {
     if (location.startsWith('/franchisee/orders')) return 1;
@@ -228,15 +206,19 @@ class _FranchiseeShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final index = _indexOf(state.matchedLocation);
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: IndexedStack(
-        index: index,
-        children: const [
-          FranchiseeDashboardScreen(),
-          FranchiseeOrdersScreen(),
-        ],
+      body: AnimatedSwitcher(
+        duration: AvishuMotion.medium,
+        switchInCurve: AvishuMotion.emphasis,
+        switchOutCurve: AvishuMotion.exit,
+        transitionBuilder: buildAvishuSwitcherTransition,
+        child: KeyedSubtree(
+          key: ValueKey(state.matchedLocation),
+          child: child,
+        ),
       ),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
@@ -248,14 +230,14 @@ class _FranchiseeShell extends StatelessWidget {
               if (i == 0) context.go('/franchisee/dashboard');
               if (i == 1) context.go('/franchisee/orders');
             },
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard_sharp),
-                label: 'DASHBOARD',
+                icon: const Icon(Icons.dashboard_sharp),
+                label: l.dashboardNavLabel,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.list_alt_sharp),
-                label: 'ORDERS',
+                icon: const Icon(Icons.list_alt_sharp),
+                label: l.ordersNavLabel,
               ),
             ],
           ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../shared/models/user_model.dart';
 import '../../shared/models/order_model.dart';
+import '../../shared/models/cart_item_model.dart';
 import '../../shared/models/product_model.dart';
 
 class FirestoreService {
@@ -19,14 +20,20 @@ class FirestoreService {
   Stream<AppUser?> watchCurrentUser() {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return Stream.value(null);
-    return _db.collection('users').doc(uid).snapshots().map(
-          (doc) => doc.exists ? AppUser.fromFirestore(doc) : null,
-        );
+    return _db
+        .collection('users')
+        .doc(uid)
+        .snapshots()
+        .map((doc) => doc.exists ? AppUser.fromFirestore(doc) : null);
   }
 
   Stream<List<ProductModel>> watchProducts() {
-    return _db.collection('products').snapshots().map(
-          (snap) => snap.docs.map((d) => ProductModel.fromFirestore(d)).toList(),
+    return _db
+        .collection('products')
+        .snapshots()
+        .map(
+          (snap) =>
+              snap.docs.map((d) => ProductModel.fromFirestore(d)).toList(),
         );
   }
 
@@ -49,17 +56,42 @@ class FirestoreService {
     });
   }
 
+  Future<void> placeCartOrders({
+    required List<CartItemModel> items,
+    required String clientName,
+  }) async {
+    if (items.isEmpty) return;
+
+    final uid = _auth.currentUser!.uid;
+    final ordersRef = _db.collection('orders');
+    final batch = _db.batch();
+
+    for (final item in items) {
+      batch.set(ordersRef.doc(), {
+        'clientId': uid,
+        'clientName': clientName,
+        'productName': item.productName,
+        'price': item.price,
+        'status': OrderStatus.placed.name,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    }
+
+    await batch.commit();
+  }
+
   Stream<List<OrderModel>> watchClientOrders(String clientId) {
     return _db
         .collection('orders')
         .where('clientId', isEqualTo: clientId)
         .snapshots()
         .map((snap) {
-      final orders =
-          snap.docs.map((d) => OrderModel.fromFirestore(d)).toList();
-      orders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      return orders;
-    });
+          final orders = snap.docs
+              .map((d) => OrderModel.fromFirestore(d))
+              .toList();
+          orders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          return orders;
+        });
   }
 
   Stream<List<OrderModel>> watchAllOrders() {
@@ -67,8 +99,9 @@ class FirestoreService {
         .collection('orders')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snap) =>
-            snap.docs.map((d) => OrderModel.fromFirestore(d)).toList());
+        .map(
+          (snap) => snap.docs.map((d) => OrderModel.fromFirestore(d)).toList(),
+        );
   }
 
   Stream<List<OrderModel>> watchSewingOrders() {
@@ -77,21 +110,34 @@ class FirestoreService {
         .where('status', isEqualTo: OrderStatus.sewing.name)
         .snapshots()
         .map((snap) {
-      final orders =
-          snap.docs.map((d) => OrderModel.fromFirestore(d)).toList();
-      orders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      return orders;
-    });
+          final orders = snap.docs
+              .map((d) => OrderModel.fromFirestore(d))
+              .toList();
+          orders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          return orders;
+        });
   }
 
   Future<void> updateOrderStatus(String orderId, OrderStatus status) async {
-    await _db.collection('orders').doc(orderId).update({
-      'status': status.name,
-    });
+    final payload = <String, Object?>{'status': status.name};
+    if (status == OrderStatus.ready) {
+      payload['completedAt'] = FieldValue.serverTimestamp();
+    } else {
+      payload['completedAt'] = FieldValue.delete();
+    }
+    await _db.collection('orders').doc(orderId).update(payload);
   }
 
   Future<void> deleteOrder(String orderId) async {
     await _db.collection('orders').doc(orderId).delete();
+  }
+
+  Future<void> updateDailyRevenueTarget(int target) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return;
+    await _db.collection('users').doc(uid).update({
+      'dailyRevenueTarget': target,
+    });
   }
 
   Future<void> seedDataIfNeeded() async {
@@ -113,16 +159,25 @@ class FirestoreService {
 
     batch.commit();
 
-    final testUsers = [
+    final List<Map<String, Object>> testUsers = [
       {'email': 'client@avishu.kz', 'name': 'CLIENT USER', 'role': 'client'},
-      {'email': 'franchisee@avishu.kz', 'name': 'FRANCHISEE USER', 'role': 'franchisee'},
-      {'email': 'production@avishu.kz', 'name': 'PRODUCTION USER', 'role': 'production'},
+      {
+        'email': 'franchisee@avishu.kz',
+        'name': 'FRANCHISEE USER',
+        'role': 'franchisee',
+        'dailyRevenueTarget': 180000,
+      },
+      {
+        'email': 'production@avishu.kz',
+        'name': 'PRODUCTION USER',
+        'role': 'production',
+      },
     ];
 
     for (final u in testUsers) {
       try {
         final cred = await _auth.createUserWithEmailAndPassword(
-          email: u['email']!,
+          email: u['email']! as String,
           password: 'test123',
         );
         await _db.collection('users').doc(cred.user!.uid).set(u);

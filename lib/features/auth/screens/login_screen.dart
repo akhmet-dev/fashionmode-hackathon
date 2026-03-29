@@ -38,7 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (mounted) context.go('/loading');
     } on FirebaseAuthException catch (e) {
-      setState(() => _error = e.message ?? AppLocalizations.of(context).authFailed);
+      setState(
+        () => _error = e.message ?? AppLocalizations.of(context).authFailed,
+      );
     } catch (e) {
       setState(() => _error = AppLocalizations.of(context).authFailed);
     } finally {
@@ -93,13 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  color: AppColors.black,
-                ),
-                decoration: InputDecoration(
-                  hintText: l.emailHint,
-                ),
+                style: GoogleFonts.inter(fontSize: 16, color: AppColors.black),
+                decoration: InputDecoration(hintText: l.emailHint),
               ),
               const SizedBox(height: 24),
               Text(
@@ -115,13 +112,8 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  color: AppColors.black,
-                ),
-                decoration: InputDecoration(
-                  hintText: l.passwordHint,
-                ),
+                style: GoogleFonts.inter(fontSize: 16, color: AppColors.black),
+                decoration: InputDecoration(hintText: l.passwordHint),
               ),
               if (_error != null) ...[
                 const SizedBox(height: 16),
