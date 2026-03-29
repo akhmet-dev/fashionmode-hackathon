@@ -48,6 +48,10 @@ final sewingOrdersProvider = StreamProvider<List<OrderModel>>((ref) {
   return ref.read(firestoreServiceProvider).watchSewingOrders();
 });
 
+final allUsersProvider = StreamProvider<List<AppUser>>((ref) {
+  return ref.read(firestoreServiceProvider).watchAllUsers();
+});
+
 class CartController extends StateNotifier<List<CartItemModel>> {
   CartController() : super(const []);
 

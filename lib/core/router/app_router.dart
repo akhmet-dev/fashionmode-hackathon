@@ -12,6 +12,8 @@ import '../../features/client/screens/client_orders_screen.dart';
 import '../../features/client/screens/client_profile_screen.dart';
 import '../../features/franchisee/screens/franchisee_dashboard_screen.dart';
 import '../../features/franchisee/screens/franchisee_orders_screen.dart';
+import '../../features/franchisee/screens/franchisee_products_screen.dart';
+import '../../features/admin/screens/admin_screen.dart';
 import '../../features/production/screens/queue_screen.dart';
 import '../../shared/models/user_model.dart';
 import '../providers/providers.dart';
@@ -34,45 +36,67 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/loading',
         builder: (context, state) => const _RoleRedirectScreen(),
       ),
-      ShellRoute(
-        builder: (context, state, child) =>
-            _ClientShell(state: state, child: child),
-        routes: [
-          GoRoute(
-            path: '/client/catalog',
-            builder: (context, state) => const CatalogScreen(),
-          ),
-          GoRoute(
-            path: '/client/orders',
-            builder: (context, state) => const ClientOrdersScreen(),
-          ),
-          GoRoute(
-            path: '/client/cart',
-            builder: (context, state) => const CartScreen(),
-          ),
-          GoRoute(
-            path: '/client/profile',
-            builder: (context, state) => const ClientProfileScreen(),
-          ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            _ClientShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/client/catalog',
+              builder: (context, state) => const CatalogScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/client/orders',
+              builder: (context, state) => const ClientOrdersScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/client/cart',
+              builder: (context, state) => const CartScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/client/profile',
+              builder: (context, state) => const ClientProfileScreen(),
+            ),
+          ]),
         ],
       ),
-      ShellRoute(
-        builder: (context, state, child) =>
-            _FranchiseeShell(state: state, child: child),
-        routes: [
-          GoRoute(
-            path: '/franchisee/dashboard',
-            builder: (context, state) => const FranchiseeDashboardScreen(),
-          ),
-          GoRoute(
-            path: '/franchisee/orders',
-            builder: (context, state) => const FranchiseeOrdersScreen(),
-          ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            _FranchiseeShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/franchisee/dashboard',
+              builder: (context, state) => const FranchiseeDashboardScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/franchisee/orders',
+              builder: (context, state) => const FranchiseeOrdersScreen(),
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/franchisee/products',
+              builder: (context, state) => const FranchiseeProductsScreen(),
+            ),
+          ]),
         ],
       ),
       GoRoute(
         path: '/production/queue',
         builder: (context, state) => const QueueScreen(),
+      ),
+      GoRoute(
+        path: '/admin',
+        builder: (context, state) => const AdminScreen(),
       ),
     ],
   );
@@ -100,6 +124,8 @@ class _RoleRedirectScreen extends ConsumerWidget {
                 context.go('/franchisee/dashboard');
               case UserRole.production:
                 context.go('/production/queue');
+              case UserRole.admin:
+                context.go('/admin');
             }
           });
         }
@@ -138,37 +164,24 @@ class _LoadingScreen extends StatelessWidget {
 }
 
 class _ClientShell extends StatelessWidget {
-  final GoRouterState state;
-  final Widget child;
+  final StatefulNavigationShell navigationShell;
 
-  const _ClientShell({required this.child, required this.state});
-
-  int _indexOf(String location) {
-    if (location.startsWith('/client/orders')) return 1;
-    if (location.startsWith('/client/cart')) return 2;
-    if (location.startsWith('/client/profile')) return 3;
-    return 0;
-  }
+  const _ClientShell({required this.navigationShell});
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final index = _indexOf(state.matchedLocation);
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: child,
+      body: navigationShell,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Divider(height: 1, color: Color(0xFF333333)),
           BottomNavigationBar(
-            currentIndex: index,
-            onTap: (i) {
-              if (i == 0) context.go('/client/catalog');
-              if (i == 1) context.go('/client/orders');
-              if (i == 2) context.go('/client/cart');
-              if (i == 3) context.go('/client/profile');
-            },
+            currentIndex: navigationShell.currentIndex,
+            onTap: (i) => navigationShell.goBranch(i,
+                initialLocation: i == navigationShell.currentIndex),
             items: [
               BottomNavigationBarItem(
                 icon: const Icon(Icons.grid_view_sharp),
@@ -195,33 +208,24 @@ class _ClientShell extends StatelessWidget {
 }
 
 class _FranchiseeShell extends StatelessWidget {
-  final GoRouterState state;
-  final Widget child;
+  final StatefulNavigationShell navigationShell;
 
-  const _FranchiseeShell({required this.child, required this.state});
-
-  int _indexOf(String location) {
-    if (location.startsWith('/franchisee/orders')) return 1;
-    return 0;
-  }
+  const _FranchiseeShell({required this.navigationShell});
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final index = _indexOf(state.matchedLocation);
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: child,
+      body: navigationShell,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Divider(height: 1, color: Color(0xFF333333)),
           BottomNavigationBar(
-            currentIndex: index,
-            onTap: (i) {
-              if (i == 0) context.go('/franchisee/dashboard');
-              if (i == 1) context.go('/franchisee/orders');
-            },
+            currentIndex: navigationShell.currentIndex,
+            onTap: (i) => navigationShell.goBranch(i,
+                initialLocation: i == navigationShell.currentIndex),
             items: [
               BottomNavigationBarItem(
                 icon: const Icon(Icons.dashboard_sharp),
@@ -230,6 +234,10 @@ class _FranchiseeShell extends StatelessWidget {
               BottomNavigationBarItem(
                 icon: const Icon(Icons.list_alt_sharp),
                 label: l.ordersNavLabel,
+              ),
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.grid_view_sharp),
+                label: 'КАТАЛОГ',
               ),
             ],
           ),

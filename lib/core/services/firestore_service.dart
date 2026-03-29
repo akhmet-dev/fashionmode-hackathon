@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import '../../shared/models/user_model.dart';
 import '../../shared/models/order_model.dart';
 import '../../shared/models/cart_item_model.dart';
@@ -220,6 +223,80 @@ class FirestoreService {
     });
   }
 
+  // ── Product management (franchisee) ────────────────────────────────────────
+
+  Future<String?> uploadProductImage(String productId, File imageFile) async {
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('products/$productId.jpg');
+    final task = await ref.putFile(
+      imageFile,
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
+    return await task.ref.getDownloadURL();
+  }
+
+  Future<void> addProduct(ProductModel product) async {
+    final ref = _db.collection('products').doc(product.id);
+    await ref.set(product.toMap());
+  }
+
+  Future<void> updateProduct(ProductModel product) async {
+    await _db.collection('products').doc(product.id).update(product.toMap());
+  }
+
+  Future<void> deleteProduct(String productId) async {
+    await _db.collection('products').doc(productId).delete();
+    // Also delete image from Storage if exists
+    try {
+      await FirebaseStorage.instance
+          .ref()
+          .child('products/$productId.jpg')
+          .delete();
+    } catch (_) {}
+  }
+
+  // ── Admin methods ──────────────────────────────────────────────────────────
+
+  Stream<List<AppUser>> watchAllUsers() {
+    return _db.collection('users').snapshots().map(
+      (snap) => snap.docs.map((d) => AppUser.fromFirestore(d)).toList()
+        ..sort((a, b) => a.name.compareTo(b.name)),
+    );
+  }
+
+  Future<void> updateUserRole(String uid, UserRole role) async {
+    await _db.collection('users').doc(uid).update({'role': role.name});
+  }
+
+  Future<void> deleteUserDoc(String uid) async {
+    await _db.collection('users').doc(uid).delete();
+  }
+
+  Future<String?> createAppUser({
+    required String email,
+    required String name,
+    required UserRole role,
+    required String password,
+  }) async {
+    try {
+      final cred = await _auth.createUserWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+      final uid = cred.user!.uid;
+      await _db.collection('users').doc(uid).set({
+        'email': email.trim(),
+        'name': name.trim().toUpperCase(),
+        'role': role.name,
+        'savedCards': <dynamic>[],
+      });
+      return null; // success
+    } on FirebaseAuthException catch (e) {
+      return e.message ?? 'Қате';
+    }
+  }
+
   Future<void> saveMeasurementProfile(
     SavedMeasurementProfileModel profile,
   ) async {
@@ -232,9 +309,6 @@ class FirestoreService {
 
   Future<void> seedDataIfNeeded() async {
     await _syncDemoCatalog();
-
-    final usersSnap = await _db.collection('users').limit(1).get();
-    if (usersSnap.docs.isNotEmpty) return;
 
     final List<Map<String, Object>> testUsers = [
       {'email': 'client@avishu.kz', 'name': 'CLIENT USER', 'role': 'client'},
@@ -249,16 +323,37 @@ class FirestoreService {
         'name': 'PRODUCTION USER',
         'role': 'production',
       },
+      {
+        'email': 'admin@avishu.kz',
+        'name': 'ADMIN USER',
+        'role': 'admin',
+      },
     ];
 
+    // Check each user individually and create only missing ones
     for (final u in testUsers) {
+      final email = u['email']! as String;
       try {
         final cred = await _auth.createUserWithEmailAndPassword(
-          email: u['email']! as String,
+          email: email,
           password: 'test123',
         );
         await _db.collection('users').doc(cred.user!.uid).set(u);
-      } on FirebaseAuthException catch (_) {}
+      } on FirebaseAuthException catch (e) {
+        // email-already-in-use means user exists in Auth — ensure Firestore doc exists
+        if (e.code == 'email-already-in-use') {
+          final signIn = await _auth.signInWithEmailAndPassword(
+            email: email,
+            password: 'test123',
+          );
+          final uid = signIn.user!.uid;
+          final doc = await _db.collection('users').doc(uid).get();
+          if (!doc.exists) {
+            await _db.collection('users').doc(uid).set(u);
+          }
+          await _auth.signOut();
+        }
+      }
     }
 
     await _auth.signOut();

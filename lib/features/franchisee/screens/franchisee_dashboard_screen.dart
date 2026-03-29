@@ -471,121 +471,159 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
     AppUser? currentUser,
     int revenueTarget,
   ) async {
-    final controller = TextEditingController(text: revenueTarget.toString());
-
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.fromLTRB(
-          24,
-          24,
-          24,
-          24 + MediaQuery.of(ctx).viewInsets.bottom,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              l.setPlanTitle,
-              style: GoogleFonts.inter(
-                fontSize: 20,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 2,
-                color: AppColors.black,
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Divider(height: 1, color: AppColors.divider),
-            const SizedBox(height: 16),
-            Text(
-              l.setPlanHint,
-              style: GoogleFonts.inter(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.2,
-                color: AppColors.grey,
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: controller,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              autofocus: true,
-              style: GoogleFonts.inter(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.black,
-              ),
-              decoration: InputDecoration(
-                hintText: l.setPlanInputHint,
-                suffixText: '₸',
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: AvishuPressable(
-                    onTap: () => Navigator.pop(ctx),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      color: AppColors.lightGrey,
-                      child: Center(
-                        child: Text(
-                          l.dismissButton,
-                          style: GoogleFonts.inter(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.5,
-                            color: AppColors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: AvishuPressable(
-                    onTap: () async {
-                      final value = int.tryParse(controller.text.trim());
-                      if (value == null || value <= 0 || currentUser == null) {
-                        return;
-                      }
-                      await ref
-                          .read(firestoreServiceProvider)
-                          .updateDailyRevenueTarget(value);
-                      if (ctx.mounted) Navigator.pop(ctx);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      color: AppColors.black,
-                      child: Center(
-                        child: Text(
-                          l.savePlanButton,
-                          style: GoogleFonts.inter(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.5,
-                            color: AppColors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+      builder: (ctx) => _TargetSheet(
+        initialTarget: revenueTarget,
+        currentUser: currentUser,
+        l: l,
       ),
     );
-    controller.dispose();
+  }
+}
+
+class _TargetSheet extends ConsumerStatefulWidget {
+  final int initialTarget;
+  final AppUser? currentUser;
+  final AppLocalizations l;
+
+  const _TargetSheet({
+    required this.initialTarget,
+    required this.currentUser,
+    required this.l,
+  });
+
+  @override
+  ConsumerState<_TargetSheet> createState() => _TargetSheetState();
+}
+
+class _TargetSheetState extends ConsumerState<_TargetSheet> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialTarget.toString());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = widget.l;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        24,
+        24,
+        24,
+        24 + MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l.setPlanTitle,
+            style: GoogleFonts.inter(
+              fontSize: 20,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              color: AppColors.black,
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Divider(height: 1, color: AppColors.divider),
+          const SizedBox(height: 16),
+          Text(
+            l.setPlanHint,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.2,
+              color: AppColors.grey,
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _controller,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            autofocus: true,
+            style: GoogleFonts.inter(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: AppColors.black,
+            ),
+            decoration: InputDecoration(
+              hintText: l.setPlanInputHint,
+              suffixText: '₸',
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: AvishuPressable(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    color: AppColors.lightGrey,
+                    child: Center(
+                      child: Text(
+                        l.dismissButton,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.5,
+                          color: AppColors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: AvishuPressable(
+                  onTap: () async {
+                    final value = int.tryParse(_controller.text.trim());
+                    if (value == null || value <= 0 || widget.currentUser == null) {
+                      return;
+                    }
+                    await ref
+                        .read(firestoreServiceProvider)
+                        .updateDailyRevenueTarget(value);
+                    if (mounted) Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    color: AppColors.black,
+                    child: Center(
+                      child: Text(
+                        l.savePlanButton,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.5,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 

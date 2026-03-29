@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Для загрузки фото товара</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Для съёмки фото товара</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Для сохранения фото товара</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

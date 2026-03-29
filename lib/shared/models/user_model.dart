@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'payment_card_model.dart';
 import 'saved_measurement_profile_model.dart';
 
-enum UserRole { client, franchisee, production }
+enum UserRole { client, franchisee, production, admin }
 
 class AppUser {
   final String uid;

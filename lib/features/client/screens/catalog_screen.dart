@@ -666,8 +666,20 @@ class _ProductArtwork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = _artworkPalette(product.imageKey);
+    // If real photo uploaded — show it
+    final url = product.imageUrl;
+    if (url != null && url.isNotEmpty) {
+      return Image.network(
+        url,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => _buildArtwork(),
+      );
+    }
+    return _buildArtwork();
+  }
 
+  Widget _buildArtwork() {
+    final palette = _artworkPalette(product.imageKey);
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(

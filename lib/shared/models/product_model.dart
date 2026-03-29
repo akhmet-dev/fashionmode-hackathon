@@ -8,6 +8,7 @@ class ProductModel {
   final int sortOrder;
   final String imageKey;
   final List<String> measurementFields;
+  final String? imageUrl; // real uploaded photo URL
 
   const ProductModel({
     required this.id,
@@ -17,6 +18,7 @@ class ProductModel {
     required this.sortOrder,
     required this.imageKey,
     required this.measurementFields,
+    this.imageUrl,
   });
 
   factory ProductModel.fromFirestore(DocumentSnapshot doc) {
@@ -31,6 +33,7 @@ class ProductModel {
       measurementFields: List<String>.from(
         data['measurementFields'] ?? const [],
       ),
+      imageUrl: data['imageUrl'] as String?,
     );
   }
 
@@ -41,5 +44,6 @@ class ProductModel {
     'sortOrder': sortOrder,
     'imageKey': imageKey,
     'measurementFields': measurementFields,
+    if (imageUrl != null) 'imageUrl': imageUrl,
   };
 }
