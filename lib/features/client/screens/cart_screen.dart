@@ -164,11 +164,21 @@ class CartScreen extends ConsumerWidget {
                       onPressed: selectedItems.isEmpty
                           ? null
                           : () async {
+                              final paymentMethod =
+                                  await showPaymentMethodSheet(
+                                    context: context,
+                                    amount: selectedTotal,
+                                    ctaLabel: 'Подтвердить заказ',
+                                    savedCards: user?.savedCards ?? const [],
+                                  );
+                              if (paymentMethod == null) return;
+
                               await ref
                                   .read(firestoreServiceProvider)
                                   .placeCartOrders(
                                     items: selectedItems,
                                     clientName: user?.name ?? 'CLIENT',
+                                    paymentMethod: paymentMethod,
                                   );
                               ref
                                   .read(cartProvider.notifier)
@@ -274,6 +284,28 @@ class _CartItemCard extends ConsumerWidget {
                         color: AppColors.black,
                       ),
                     ),
+                    const SizedBox(height: 6),
+                    Text(
+                      item.sizing.hasDetailedMeasurements
+                          ? item.sizing.summary
+                          : 'Размер: ${item.sizing.summary}',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.black,
+                      ),
+                    ),
+                    if (item.sizing.hasDetailedMeasurements) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        item.sizing.details,
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.grey,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 8),
                     Text(
                       '₸${formatter.format(item.price)}',

@@ -157,7 +157,8 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                               const SizedBox(height: 10),
                               AnimatedSwitcher(
                                 duration: AvishuMotion.medium,
-                                transitionBuilder: buildAvishuSwitcherTransition,
+                                transitionBuilder:
+                                    buildAvishuSwitcherTransition,
                                 child: Text(
                                   '₸${formatter.format(todayRevenue)}',
                                   key: ValueKey(todayRevenue),
@@ -376,7 +377,29 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                              '${order.clientName} · ${DateFormat('HH:mm').format(order.createdAt)}',
+                                              '${order.clientName} · ${order.sizing.hasDetailedMeasurements ? order.sizing.summary : 'Размер: ${order.sizing.summary}'}',
+                                              style: GoogleFonts.inter(
+                                                fontSize: 11,
+                                                color: AppColors.grey,
+                                              ),
+                                            ),
+                                            if (order
+                                                .sizing
+                                                .hasDetailedMeasurements) ...[
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                order.sizing.details,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 11,
+                                                  color: AppColors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              DateFormat(
+                                                'HH:mm',
+                                              ).format(order.createdAt),
                                               style: GoogleFonts.inter(
                                                 fontSize: 11,
                                                 color: AppColors.grey,
@@ -392,8 +415,7 @@ class FranchiseeDashboardScreen extends ConsumerWidget {
                                           horizontal: 10,
                                           vertical: 6,
                                         ),
-                                        color:
-                                            order.status == OrderStatus.ready
+                                        color: order.status == OrderStatus.ready
                                             ? AppColors.black
                                             : AppColors.white,
                                         child: Text(

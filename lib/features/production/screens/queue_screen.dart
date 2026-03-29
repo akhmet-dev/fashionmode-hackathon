@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 import 'package:fashionmode_hackathon/l10n/app_localizations.dart';
 
@@ -179,7 +178,6 @@ class _ProductionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final formatter = NumberFormat('#,###', 'en_US');
 
     return AvishuReveal(
       delay: Duration(milliseconds: 35 * (index % 8)),
@@ -205,19 +203,14 @@ class _ProductionCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    '${order.clientName} · ₸${formatter.format(order.price)}',
+                    order.sizing.hasDetailedMeasurements
+                        ? order.sizing.details
+                        : 'Размер: ${order.sizing.summary}',
                     style: GoogleFonts.inter(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    DateFormat('dd.MM.yyyy HH:mm').format(order.createdAt),
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      color: AppColors.grey,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                      color: AppColors.black,
                     ),
                   ),
                 ],

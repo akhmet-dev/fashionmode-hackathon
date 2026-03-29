@@ -12,6 +12,7 @@ import '../../../shared/models/app_notification_model.dart';
 import '../../../shared/models/order_model.dart';
 import '../../../shared/widgets/avishu_dialogs.dart';
 import '../../../shared/widgets/avishu_motion.dart';
+import '../../../shared/widgets/order_payment_summary.dart';
 
 String _statusLabel(OrderStatus s, AppLocalizations l) => switch (s) {
   OrderStatus.placed => l.statusPlaced,
@@ -53,12 +54,8 @@ class ClientOrdersScreen extends ConsumerWidget {
                   ),
                   const SizedBox(width: 12),
                   AvishuPressable(
-                    onTap: () => _showNotificationInbox(
-                      context,
-                      ref,
-                      l,
-                      notifications,
-                    ),
+                    onTap: () =>
+                        _showNotificationInbox(context, ref, l, notifications),
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -673,7 +670,35 @@ class _OrderCard extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 16),
+            Text(
+              order.sizing.hasDetailedMeasurements
+                  ? order.sizing.summary
+                  : 'Размер: ${order.sizing.summary}',
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.6,
+                color: AppColors.black,
+              ),
+            ),
+            if (order.sizing.hasDetailedMeasurements) ...[
+              const SizedBox(height: 4),
+              Text(
+                order.sizing.details,
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.grey,
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
             _StatusProgressBar(status: order.status),
+            const SizedBox(height: 12),
+            OrderPaymentSummary(
+              method: order.paymentMethod,
+              status: order.paymentStatus,
+            ),
             const SizedBox(height: 12),
             Text(
               DateFormat('dd.MM.yyyy HH:mm').format(order.createdAt),

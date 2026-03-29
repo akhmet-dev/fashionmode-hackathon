@@ -266,9 +266,7 @@ class _ProductCard extends ConsumerWidget {
               Expanded(
                 child: Stack(
                   children: [
-                    Positioned.fill(
-                      child: Container(color: AppColors.lightGrey),
-                    ),
+                    Positioned.fill(child: _ProductArtwork(product: product)),
                     Positioned(
                       left: 16,
                       top: 16,
@@ -286,16 +284,6 @@ class _ProductCard extends ConsumerWidget {
                             letterSpacing: 1.5,
                             color: AppColors.black,
                           ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        product.name.substring(0, 1),
-                        style: GoogleFonts.inter(
-                          fontSize: 58,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.divider,
                         ),
                       ),
                     ),
@@ -341,6 +329,7 @@ class _ProductCard extends ConsumerWidget {
   Future<void> _showProductModal(BuildContext context, WidgetRef ref) async {
     final l = AppLocalizations.of(context);
     final formatter = NumberFormat('#,###', 'en_US');
+    final currentUser = ref.read(currentUserProvider).valueOrNull;
     DateTime? selectedDate;
 
     await showModalBottomSheet<void>(
@@ -394,6 +383,11 @@ class _ProductCard extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                     color: AppColors.grey,
                   ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 220,
+                  child: _ProductArtwork(product: product, isLarge: true),
                 ),
                 const SizedBox(height: 20),
                 const Divider(height: 1, color: AppColors.divider),
@@ -479,12 +473,34 @@ class _ProductCard extends ConsumerWidget {
                       onPressed: selectedDate == null
                           ? null
                           : () async {
+                              final sizing = await showOrderSizingSheet(
+                                context: context,
+                                title: 'Размер клиента',
+                                ctaLabel: 'Продолжить',
+                                measurementFields: product.measurementFields,
+                                savedProfile: currentUser?.savedMeasurements,
+                              );
+                              if (sizing == null) return;
+                              if (!context.mounted) return;
+
+                              final paymentMethod =
+                                  await showPaymentMethodSheet(
+                                    context: context,
+                                    amount: product.price,
+                                    ctaLabel: 'Подтвердить предзаказ',
+                                    savedCards:
+                                        currentUser?.savedCards ?? const [],
+                                  );
+                              if (paymentMethod == null) return;
+
                               await ref
                                   .read(firestoreServiceProvider)
                                   .placeOrder(
                                     productName: product.name,
                                     price: product.price,
                                     clientName: clientName,
+                                    sizing: sizing,
+                                    paymentMethod: paymentMethod,
                                     preorderDate: selectedDate,
                                   );
                               if (ctx.mounted) Navigator.pop(ctx);
@@ -530,9 +546,18 @@ class _ProductCard extends ConsumerWidget {
                             height: 60,
                             child: OutlinedButton(
                               onPressed: () async {
+                                final sizing = await showOrderSizingSheet(
+                                  context: context,
+                                  title: 'Размер клиента',
+                                  ctaLabel: 'Добавить в корзину',
+                                  measurementFields: product.measurementFields,
+                                  savedProfile: currentUser?.savedMeasurements,
+                                );
+                                if (sizing == null) return;
+
                                 ref
                                     .read(cartProvider.notifier)
-                                    .addProduct(product);
+                                    .addProduct(product, sizing: sizing);
                                 if (ctx.mounted) Navigator.pop(ctx);
                                 if (!context.mounted) return;
                                 final action = await showAvishuActionDialog(
@@ -563,12 +588,34 @@ class _ProductCard extends ConsumerWidget {
                             height: 60,
                             child: ElevatedButton(
                               onPressed: () async {
+                                final sizing = await showOrderSizingSheet(
+                                  context: context,
+                                  title: 'Размер клиента',
+                                  ctaLabel: 'Продолжить',
+                                  measurementFields: product.measurementFields,
+                                  savedProfile: currentUser?.savedMeasurements,
+                                );
+                                if (sizing == null) return;
+                                if (!context.mounted) return;
+
+                                final paymentMethod =
+                                    await showPaymentMethodSheet(
+                                      context: context,
+                                      amount: product.price,
+                                      ctaLabel: 'Подтвердить оплату',
+                                      savedCards:
+                                          currentUser?.savedCards ?? const [],
+                                    );
+                                if (paymentMethod == null) return;
+
                                 await ref
                                     .read(firestoreServiceProvider)
                                     .placeOrder(
                                       productName: product.name,
                                       price: product.price,
                                       clientName: clientName,
+                                      sizing: sizing,
+                                      paymentMethod: paymentMethod,
                                     );
                                 if (ctx.mounted) Navigator.pop(ctx);
                                 if (!context.mounted) return;
@@ -609,4 +656,247 @@ class _ProductCard extends ConsumerWidget {
 
 extension on ProductModel {
   String get productNameSafe => name;
+}
+
+class _ProductArtwork extends StatelessWidget {
+  final ProductModel product;
+  final bool isLarge;
+
+  const _ProductArtwork({required this.product, this.isLarge = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = _artworkPalette(product.imageKey);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [palette.backgroundTop, palette.backgroundBottom],
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            left: isLarge ? -24 : -18,
+            top: isLarge ? -18 : -10,
+            child: _BackdropBlur(
+              size: isLarge ? 130 : 90,
+              color: palette.accent.withValues(alpha: 0.28),
+            ),
+          ),
+          Positioned(
+            right: isLarge ? -20 : -12,
+            bottom: isLarge ? -28 : -20,
+            child: _BackdropBlur(
+              size: isLarge ? 150 : 100,
+              color: AppColors.white.withValues(alpha: 0.16),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: EdgeInsets.all(isLarge ? 12 : 8),
+              child: AspectRatio(
+                aspectRatio: 0.78,
+                child: CustomPaint(painter: _GarmentPainter(palette: palette)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BackdropBlur extends StatelessWidget {
+  final double size;
+  final Color color;
+
+  const _BackdropBlur({required this.size, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(colors: [color, color.withValues(alpha: 0)]),
+      ),
+    );
+  }
+}
+
+class _ArtworkPalette {
+  final Color backgroundTop;
+  final Color backgroundBottom;
+  final Color garment;
+  final Color garmentHighlight;
+  final Color seam;
+  final Color accent;
+  final bool longSleeves;
+
+  const _ArtworkPalette({
+    required this.backgroundTop,
+    required this.backgroundBottom,
+    required this.garment,
+    required this.garmentHighlight,
+    required this.seam,
+    required this.accent,
+    required this.longSleeves,
+  });
+}
+
+_ArtworkPalette _artworkPalette(String imageKey) {
+  return switch (imageKey) {
+    'white_tshirt' => const _ArtworkPalette(
+      backgroundTop: Color(0xFFF8F7F3),
+      backgroundBottom: Color(0xFFE9E5DE),
+      garment: Color(0xFFFDFDFB),
+      garmentHighlight: Color(0xFFFFFFFF),
+      seam: Color(0xFFCBC6BE),
+      accent: Color(0xFFD9D2C7),
+      longSleeves: false,
+    ),
+    'black_tshirt' => const _ArtworkPalette(
+      backgroundTop: Color(0xFF1F2024),
+      backgroundBottom: Color(0xFF0E1014),
+      garment: Color(0xFF101215),
+      garmentHighlight: Color(0xFF2A2E34),
+      seam: Color(0xFF5A5F68),
+      accent: Color(0xFF3D434B),
+      longSleeves: false,
+    ),
+    'grey_tshirt' => const _ArtworkPalette(
+      backgroundTop: Color(0xFFE9EAEC),
+      backgroundBottom: Color(0xFFD4D7DB),
+      garment: Color(0xFFB8BEC6),
+      garmentHighlight: Color(0xFFD8DCE1),
+      seam: Color(0xFF8A919A),
+      accent: Color(0xFFC8CDD3),
+      longSleeves: false,
+    ),
+    'black_sweater' => const _ArtworkPalette(
+      backgroundTop: Color(0xFF24262A),
+      backgroundBottom: Color(0xFF121417),
+      garment: Color(0xFF15181C),
+      garmentHighlight: Color(0xFF2D3238),
+      seam: Color(0xFF636A73),
+      accent: Color(0xFF3F454D),
+      longSleeves: true,
+    ),
+    _ => const _ArtworkPalette(
+      backgroundTop: Color(0xFFF4F4F4),
+      backgroundBottom: Color(0xFFE7E7E7),
+      garment: Color(0xFFEFEFEF),
+      garmentHighlight: Color(0xFFFFFFFF),
+      seam: Color(0xFFBDBDBD),
+      accent: Color(0xFFD9D9D9),
+      longSleeves: false,
+    ),
+  };
+}
+
+class _GarmentPainter extends CustomPainter {
+  final _ArtworkPalette palette;
+
+  const _GarmentPainter({required this.palette});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final garmentPath = _buildGarmentPath(size, palette.longSleeves);
+    canvas.drawShadow(
+      garmentPath,
+      Colors.black.withValues(alpha: 0.28),
+      18,
+      false,
+    );
+
+    final garmentPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [palette.garmentHighlight, palette.garment],
+      ).createShader(Offset.zero & size);
+
+    canvas.drawPath(garmentPath, garmentPaint);
+
+    final foldPaint = Paint()
+      ..color = palette.seam.withValues(alpha: 0.34)
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = size.width * 0.015;
+
+    final leftFold = Path()
+      ..moveTo(size.width * 0.39, size.height * 0.34)
+      ..quadraticBezierTo(
+        size.width * 0.34,
+        size.height * 0.56,
+        size.width * 0.42,
+        size.height * 0.84,
+      );
+    final rightFold = Path()
+      ..moveTo(size.width * 0.61, size.height * 0.34)
+      ..quadraticBezierTo(
+        size.width * 0.66,
+        size.height * 0.56,
+        size.width * 0.58,
+        size.height * 0.84,
+      );
+
+    canvas.drawPath(leftFold, foldPaint);
+    canvas.drawPath(rightFold, foldPaint);
+
+    final collarPaint = Paint()..color = palette.seam.withValues(alpha: 0.42);
+    canvas.drawArc(
+      Rect.fromCenter(
+        center: Offset(size.width / 2, size.height * 0.19),
+        width: size.width * 0.18,
+        height: size.height * 0.08,
+      ),
+      0,
+      3.14,
+      false,
+      collarPaint
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = size.width * 0.018,
+    );
+  }
+
+  Path _buildGarmentPath(Size size, bool longSleeves) {
+    final centerX = size.width / 2;
+    final topY = size.height * 0.12;
+    final shoulderY = size.height * 0.21;
+    final sleeveStartY = size.height * 0.29;
+    final sleeveEndY = longSleeves ? size.height * 0.7 : size.height * 0.44;
+    final hemY = size.height * 0.9;
+    final bodyHalfWidth = size.width * 0.22;
+    final sleeveOuter = size.width * (longSleeves ? 0.42 : 0.36);
+
+    return Path()
+      ..moveTo(centerX - size.width * 0.08, topY)
+      ..quadraticBezierTo(
+        centerX,
+        size.height * 0.17,
+        centerX + size.width * 0.08,
+        topY,
+      )
+      ..lineTo(centerX + bodyHalfWidth * 0.86, shoulderY)
+      ..lineTo(centerX + sleeveOuter, sleeveStartY)
+      ..lineTo(centerX + sleeveOuter * 0.88, sleeveEndY)
+      ..lineTo(centerX + bodyHalfWidth * 0.95, sleeveEndY + size.height * 0.02)
+      ..lineTo(centerX + bodyHalfWidth * 0.82, hemY)
+      ..lineTo(centerX - bodyHalfWidth * 0.82, hemY)
+      ..lineTo(centerX - bodyHalfWidth * 0.95, sleeveEndY + size.height * 0.02)
+      ..lineTo(centerX - sleeveOuter * 0.88, sleeveEndY)
+      ..lineTo(centerX - sleeveOuter, sleeveStartY)
+      ..lineTo(centerX - bodyHalfWidth * 0.86, shoulderY)
+      ..close();
+  }
+
+  @override
+  bool shouldRepaint(covariant _GarmentPainter oldDelegate) {
+    return oldDelegate.palette != palette;
+  }
 }

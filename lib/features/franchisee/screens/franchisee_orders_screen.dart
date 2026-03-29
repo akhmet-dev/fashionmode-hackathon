@@ -12,6 +12,7 @@ import '../../../shared/models/order_model.dart';
 import '../../../shared/widgets/avishu_buttons.dart';
 import '../../../shared/widgets/avishu_dialogs.dart';
 import '../../../shared/widgets/avishu_motion.dart';
+import '../../../shared/widgets/order_payment_summary.dart';
 
 String _statusLabel(OrderStatus status, AppLocalizations l) => switch (status) {
   OrderStatus.placed => l.statusPlaced,
@@ -95,6 +96,9 @@ class _FranchiseeOrdersScreenState
                                   _query.toLowerCase(),
                                 ) ||
                                 order.clientName.toLowerCase().contains(
+                                  _query.toLowerCase(),
+                                ) ||
+                                order.sizing.displayText.toLowerCase().contains(
                                   _query.toLowerCase(),
                                 ),
                           )
@@ -209,11 +213,55 @@ class _FranchiseeOrderCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${order.clientName} · ₸${formatter.format(order.price)}',
+                    'Клиент: ${order.clientName}',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: AppColors.grey,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
                     ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    order.sizing.hasDetailedMeasurements
+                        ? order.sizing.summary
+                        : 'Размер: ${order.sizing.summary}',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  if (order.sizing.hasDetailedMeasurements) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      order.sizing.details,
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: AppColors.grey,
+                      ),
+                    ),
+                  ] else
+                    Text(
+                      '₸${formatter.format(order.price)}',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: AppColors.grey,
+                      ),
+                    ),
+                  if (order.sizing.hasDetailedMeasurements) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      '₸${formatter.format(order.price)}',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: AppColors.grey,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 12),
+                  OrderPaymentSummary(
+                    method: order.paymentMethod,
+                    status: order.paymentStatus,
                   ),
                   const SizedBox(height: 4),
                   Text(

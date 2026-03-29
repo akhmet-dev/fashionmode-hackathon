@@ -36,15 +36,15 @@ class AvishuApp extends ConsumerWidget {
     ref.listen<AsyncValue<AppUser?>>(currentUserProvider, (_, next) {
       FcmService().syncUser(next.valueOrNull);
       unawaited(
-        ref.read(notificationInboxProvider.notifier).syncUser(
-              next.valueOrNull,
-            ),
+        ref.read(notificationInboxProvider.notifier).syncUser(next.valueOrNull),
       );
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FcmService().syncUser(currentUser);
-      unawaited(ref.read(notificationInboxProvider.notifier).syncUser(currentUser));
+      unawaited(
+        ref.read(notificationInboxProvider.notifier).syncUser(currentUser),
+      );
     });
 
     return MaterialApp.router(
@@ -53,9 +53,8 @@ class AvishuApp extends ConsumerWidget {
       theme: AppTheme.theme,
       locale: const Locale('ru'),
       routerConfig: router,
-      builder: (context, child) => _RealtimeNotificationBridge(
-        child: child ?? const SizedBox.shrink(),
-      ),
+      builder: (context, child) =>
+          _RealtimeNotificationBridge(child: child ?? const SizedBox.shrink()),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -131,7 +130,9 @@ class _RealtimeNotificationBridgeState
           };
           if (body.isNotEmpty) {
             unawaited(
-              ref.read(notificationInboxProvider.notifier).addNotification(
+              ref
+                  .read(notificationInboxProvider.notifier)
+                  .addNotification(
                     title: l.appName,
                     body: body,
                     id: '${order.id}_${order.status.name}',
@@ -168,7 +169,9 @@ class _RealtimeNotificationBridgeState
         final previous = _franchiseeStatuses[order.id];
         if (previous == null) {
           unawaited(
-            ref.read(notificationInboxProvider.notifier).addNotification(
+            ref
+                .read(notificationInboxProvider.notifier)
+                .addNotification(
                   title: l.appName,
                   body: l.franchiseeNewOrderNotification(order.productName),
                   id: '${order.id}_new',
@@ -179,9 +182,12 @@ class _RealtimeNotificationBridgeState
             body: l.franchiseeNewOrderNotification(order.productName),
             id: order.id.hashCode ^ 11,
           );
-        } else if (previous != order.status && order.status == OrderStatus.ready) {
+        } else if (previous != order.status &&
+            order.status == OrderStatus.ready) {
           unawaited(
-            ref.read(notificationInboxProvider.notifier).addNotification(
+            ref
+                .read(notificationInboxProvider.notifier)
+                .addNotification(
                   title: l.appName,
                   body: l.franchiseeOrderReadyNotification(order.productName),
                   id: '${order.id}_${order.status.name}',
@@ -214,7 +220,9 @@ class _RealtimeNotificationBridgeState
       for (final order in orders) {
         if (_productionIds.add(order.id)) {
           unawaited(
-            ref.read(notificationInboxProvider.notifier).addNotification(
+            ref
+                .read(notificationInboxProvider.notifier)
+                .addNotification(
                   title: l.appName,
                   body: l.productionTaskNotification(order.productName),
                   id: '${order.id}_production',

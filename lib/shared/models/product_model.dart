@@ -5,12 +5,18 @@ class ProductModel {
   final String name;
   final int price;
   final bool isPreorder;
+  final int sortOrder;
+  final String imageKey;
+  final List<String> measurementFields;
 
   const ProductModel({
     required this.id,
     required this.name,
     required this.price,
     required this.isPreorder,
+    required this.sortOrder,
+    required this.imageKey,
+    required this.measurementFields,
   });
 
   factory ProductModel.fromFirestore(DocumentSnapshot doc) {
@@ -20,6 +26,11 @@ class ProductModel {
       name: data['name'] ?? '',
       price: data['price'] ?? 0,
       isPreorder: data['isPreorder'] ?? false,
+      sortOrder: data['sortOrder'] ?? 0,
+      imageKey: data['imageKey'] ?? doc.id,
+      measurementFields: List<String>.from(
+        data['measurementFields'] ?? const [],
+      ),
     );
   }
 
@@ -27,5 +38,8 @@ class ProductModel {
     'name': name,
     'price': price,
     'isPreorder': isPreorder,
+    'sortOrder': sortOrder,
+    'imageKey': imageKey,
+    'measurementFields': measurementFields,
   };
 }

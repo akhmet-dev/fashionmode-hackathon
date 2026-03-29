@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../shared/models/user_model.dart';
 import '../../shared/models/order_model.dart';
 import '../../shared/models/cart_item_model.dart';
+import '../../shared/models/order_size_model.dart';
+import '../../shared/models/payment_card_model.dart';
 import '../../shared/models/product_model.dart';
+import '../../shared/models/saved_measurement_profile_model.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -28,29 +31,40 @@ class FirestoreService {
   }
 
   Stream<List<ProductModel>> watchProducts() {
-    return _db
-        .collection('products')
-        .snapshots()
-        .map(
-          (snap) =>
-              snap.docs.map((d) => ProductModel.fromFirestore(d)).toList(),
-        );
+    return _db.collection('products').snapshots().map((snap) {
+      final products = snap.docs
+          .map((d) => ProductModel.fromFirestore(d))
+          .toList();
+      products.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+      return products;
+    });
   }
 
   Future<void> placeOrder({
     required String productName,
     required int price,
     required String clientName,
+    required OrderSizeModel sizing,
+    required PaymentMethod paymentMethod,
     DateTime? preorderDate,
   }) async {
     final uid = _auth.currentUser!.uid;
+    final paymentStatus = paymentMethod == PaymentMethod.cash
+        ? PaymentStatus.pending
+        : PaymentStatus.paid;
     await _db.collection('orders').add({
       'clientId': uid,
       'clientName': clientName,
       'productName': productName,
+      'size': sizing.summary,
+      'sizing': sizing.toMap(),
       'price': price,
       'status': OrderStatus.placed.name,
+      'paymentMethod': paymentMethod.name,
+      'paymentStatus': paymentStatus.name,
       'createdAt': FieldValue.serverTimestamp(),
+      if (paymentStatus == PaymentStatus.paid)
+        'paidAt': FieldValue.serverTimestamp(),
       if (preorderDate != null)
         'preorderDate': Timestamp.fromDate(preorderDate),
     });
@@ -59,21 +73,31 @@ class FirestoreService {
   Future<void> placeCartOrders({
     required List<CartItemModel> items,
     required String clientName,
+    required PaymentMethod paymentMethod,
   }) async {
     if (items.isEmpty) return;
 
     final uid = _auth.currentUser!.uid;
     final ordersRef = _db.collection('orders');
     final batch = _db.batch();
+    final paymentStatus = paymentMethod == PaymentMethod.cash
+        ? PaymentStatus.pending
+        : PaymentStatus.paid;
 
     for (final item in items) {
       batch.set(ordersRef.doc(), {
         'clientId': uid,
         'clientName': clientName,
         'productName': item.productName,
+        'size': item.sizing.summary,
+        'sizing': item.sizing.toMap(),
         'price': item.price,
         'status': OrderStatus.placed.name,
+        'paymentMethod': paymentMethod.name,
+        'paymentStatus': paymentStatus.name,
         'createdAt': FieldValue.serverTimestamp(),
+        if (paymentStatus == PaymentStatus.paid)
+          'paidAt': FieldValue.serverTimestamp(),
       });
     }
 
@@ -140,24 +164,77 @@ class FirestoreService {
     });
   }
 
+  Future<void> addSavedCard({
+    required String cardholderName,
+    required String cardNumber,
+    required String expiry,
+  }) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return;
+
+    final digits = cardNumber.replaceAll(RegExp(r'\D'), '');
+    if (digits.length < 4) return;
+
+    final last4 = digits.substring(digits.length - 4);
+    final card = PaymentCardModel(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      cardholderName: cardholderName.trim(),
+      maskedNumber: '•••• •••• •••• $last4',
+      last4: last4,
+      expiry: expiry.trim(),
+    );
+
+    final userDoc = _db.collection('users').doc(uid);
+    final snapshot = await userDoc.get();
+    final data = snapshot.data() ?? <String, dynamic>{};
+    final cards = ((data['savedCards'] as List<dynamic>?) ?? const [])
+        .map(
+          (item) =>
+              PaymentCardModel.fromMap(Map<String, dynamic>.from(item as Map)),
+        )
+        .toList();
+    cards.add(card);
+
+    await userDoc.update({
+      'savedCards': cards.map((item) => item.toMap()).toList(),
+    });
+  }
+
+  Future<void> removeSavedCard(String cardId) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return;
+
+    final userDoc = _db.collection('users').doc(uid);
+    final snapshot = await userDoc.get();
+    final data = snapshot.data() ?? <String, dynamic>{};
+    final cards = ((data['savedCards'] as List<dynamic>?) ?? const [])
+        .map(
+          (item) =>
+              PaymentCardModel.fromMap(Map<String, dynamic>.from(item as Map)),
+        )
+        .where((card) => card.id != cardId)
+        .toList();
+
+    await userDoc.update({
+      'savedCards': cards.map((item) => item.toMap()).toList(),
+    });
+  }
+
+  Future<void> saveMeasurementProfile(
+    SavedMeasurementProfileModel profile,
+  ) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return;
+    await _db.collection('users').doc(uid).update({
+      'savedMeasurements': profile.toMap(),
+    });
+  }
+
   Future<void> seedDataIfNeeded() async {
-    final productsSnap = await _db.collection('products').limit(1).get();
-    if (productsSnap.docs.isNotEmpty) return;
+    await _syncDemoCatalog();
 
-    final batch = _db.batch();
-
-    final products = [
-      {'name': 'AVISHU MINIMAL COAT', 'price': 45000, 'isPreorder': false},
-      {'name': 'STRUCTURED BLAZER', 'price': 32000, 'isPreorder': false},
-      {'name': 'EVENING DRESS', 'price': 28000, 'isPreorder': true},
-      {'name': 'WIDE LEG TROUSERS', 'price': 18000, 'isPreorder': false},
-    ];
-
-    for (final p in products) {
-      batch.set(_db.collection('products').doc(), p);
-    }
-
-    batch.commit();
+    final usersSnap = await _db.collection('users').limit(1).get();
+    if (usersSnap.docs.isNotEmpty) return;
 
     final List<Map<String, Object>> testUsers = [
       {'email': 'client@avishu.kz', 'name': 'CLIENT USER', 'role': 'client'},
@@ -185,5 +262,61 @@ class FirestoreService {
     }
 
     await _auth.signOut();
+  }
+
+  Future<void> _syncDemoCatalog() async {
+    final productsRef = _db.collection('products');
+    final existingProducts = await productsRef.get();
+    final batch = _db.batch();
+
+    const measurementFields = ['Ширина груди', 'Ширина плеч', 'Длина рукава'];
+
+    const demoCatalog = <String, Map<String, Object>>{
+      'white_tshirt': {
+        'name': 'WHITE T-SHIRT',
+        'price': 14000,
+        'isPreorder': false,
+        'sortOrder': 0,
+        'imageKey': 'white_tshirt',
+        'measurementFields': measurementFields,
+      },
+      'black_tshirt': {
+        'name': 'BLACK T-SHIRT',
+        'price': 14500,
+        'isPreorder': false,
+        'sortOrder': 1,
+        'imageKey': 'black_tshirt',
+        'measurementFields': measurementFields,
+      },
+      'grey_tshirt': {
+        'name': 'GREY T-SHIRT',
+        'price': 15000,
+        'isPreorder': false,
+        'sortOrder': 2,
+        'imageKey': 'grey_tshirt',
+        'measurementFields': measurementFields,
+      },
+      'black_sweater_preorder': {
+        'name': 'BLACK SWEATER',
+        'price': 22000,
+        'isPreorder': true,
+        'sortOrder': 3,
+        'imageKey': 'black_sweater',
+        'measurementFields': measurementFields,
+      },
+    };
+
+    final validIds = demoCatalog.keys.toSet();
+    for (final doc in existingProducts.docs) {
+      if (!validIds.contains(doc.id)) {
+        batch.delete(doc.reference);
+      }
+    }
+
+    for (final entry in demoCatalog.entries) {
+      batch.set(productsRef.doc(entry.key), entry.value);
+    }
+
+    await batch.commit();
   }
 }

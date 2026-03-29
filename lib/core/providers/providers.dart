@@ -7,6 +7,7 @@ import '../../shared/models/user_model.dart';
 import '../../shared/models/order_model.dart';
 import '../../shared/models/cart_item_model.dart';
 import '../../shared/models/app_notification_model.dart';
+import '../../shared/models/order_size_model.dart';
 import '../../shared/models/product_model.dart';
 
 final firestoreServiceProvider = Provider<FirestoreService>((ref) {
@@ -50,8 +51,8 @@ final sewingOrdersProvider = StreamProvider<List<OrderModel>>((ref) {
 class CartController extends StateNotifier<List<CartItemModel>> {
   CartController() : super(const []);
 
-  void addProduct(ProductModel product) {
-    state = [...state, CartItemModel.fromProduct(product)];
+  void addProduct(ProductModel product, {required OrderSizeModel sizing}) {
+    state = [...state, CartItemModel.fromProduct(product, sizing: sizing)];
   }
 
   void toggleSelection(String itemId) {
@@ -109,12 +110,15 @@ class NotificationInboxController
     final prefs = await SharedPreferences.getInstance();
     if (storageKey == null) return;
     final raw = prefs.getStringList(storageKey) ?? const [];
-    state = raw
-        .map((item) => AppNotificationModel.fromMap(
-              jsonDecode(item) as Map<String, dynamic>,
-            ))
-        .toList()
-      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    state =
+        raw
+            .map(
+              (item) => AppNotificationModel.fromMap(
+                jsonDecode(item) as Map<String, dynamic>,
+              ),
+            )
+            .toList()
+          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
   Future<void> addNotification({
@@ -152,12 +156,13 @@ class NotificationInboxController
   }
 }
 
-final notificationInboxProvider = StateNotifierProvider<
-  NotificationInboxController,
-  List<AppNotificationModel>
->((ref) {
-  return NotificationInboxController();
-});
+final notificationInboxProvider =
+    StateNotifierProvider<
+      NotificationInboxController,
+      List<AppNotificationModel>
+    >((ref) {
+      return NotificationInboxController();
+    });
 
 final unreadNotificationCountProvider = Provider<int>((ref) {
   return ref

@@ -9,11 +9,11 @@ import '../../features/auth/screens/login_screen.dart';
 import '../../features/client/screens/cart_screen.dart';
 import '../../features/client/screens/catalog_screen.dart';
 import '../../features/client/screens/client_orders_screen.dart';
+import '../../features/client/screens/client_profile_screen.dart';
 import '../../features/franchisee/screens/franchisee_dashboard_screen.dart';
 import '../../features/franchisee/screens/franchisee_orders_screen.dart';
 import '../../features/production/screens/queue_screen.dart';
 import '../../shared/models/user_model.dart';
-import '../../shared/widgets/avishu_motion.dart';
 import '../providers/providers.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -49,6 +49,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/client/cart',
             builder: (context, state) => const CartScreen(),
+          ),
+          GoRoute(
+            path: '/client/profile',
+            builder: (context, state) => const ClientProfileScreen(),
           ),
         ],
       ),
@@ -142,6 +146,7 @@ class _ClientShell extends StatelessWidget {
   int _indexOf(String location) {
     if (location.startsWith('/client/orders')) return 1;
     if (location.startsWith('/client/cart')) return 2;
+    if (location.startsWith('/client/profile')) return 3;
     return 0;
   }
 
@@ -151,16 +156,7 @@ class _ClientShell extends StatelessWidget {
     final index = _indexOf(state.matchedLocation);
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: AnimatedSwitcher(
-        duration: AvishuMotion.medium,
-        switchInCurve: AvishuMotion.emphasis,
-        switchOutCurve: AvishuMotion.exit,
-        transitionBuilder: buildAvishuSwitcherTransition,
-        child: KeyedSubtree(
-          key: ValueKey(state.matchedLocation),
-          child: child,
-        ),
-      ),
+      body: child,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -171,6 +167,7 @@ class _ClientShell extends StatelessWidget {
               if (i == 0) context.go('/client/catalog');
               if (i == 1) context.go('/client/orders');
               if (i == 2) context.go('/client/cart');
+              if (i == 3) context.go('/client/profile');
             },
             items: [
               BottomNavigationBarItem(
@@ -184,6 +181,10 @@ class _ClientShell extends StatelessWidget {
               BottomNavigationBarItem(
                 icon: const Icon(Icons.shopping_bag_outlined),
                 label: l.cartNavLabel,
+              ),
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline_sharp),
+                label: 'ПРОФИЛЬ',
               ),
             ],
           ),
@@ -210,16 +211,7 @@ class _FranchiseeShell extends StatelessWidget {
     final index = _indexOf(state.matchedLocation);
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: AnimatedSwitcher(
-        duration: AvishuMotion.medium,
-        switchInCurve: AvishuMotion.emphasis,
-        switchOutCurve: AvishuMotion.exit,
-        transitionBuilder: buildAvishuSwitcherTransition,
-        child: KeyedSubtree(
-          key: ValueKey(state.matchedLocation),
-          child: child,
-        ),
-      ),
+      body: child,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
